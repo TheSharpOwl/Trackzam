@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Trackzam
+namespace TrackzamClient
 {
     class Program
     {
@@ -9,6 +9,7 @@ namespace Trackzam
         {
             Console.WriteLine("Hello World!");
             Console.WriteLine(RuntimeInformation.FrameworkDescription);
+
         }
     }
 }
