@@ -8,38 +8,36 @@ using System.Collections;
 
 namespace TrackzamClient
 {
+    // TODO replace Console.Write messages later when GUI works
     class Keylogger
     {
         protected string logDir = "";
         public void setPath(string path)
         {
-            //System.IO.FileInfo fi = null;
-            //try
-            //{
-            //    fi = new System.IO.FileInfo(dir);
-            //}
-            //catch (ArgumentException) { Console.WriteLine("ArgumentException"); }
-            //catch (System.IO.PathTooLongException) { Console.WriteLine("PathTooLongException"); }
-            //catch (NotSupportedException) { Console.WriteLine("NotSupportedException"); }
-            //if (ReferenceEquals(fi, null))
-            //{
-            //    // file name is not valid
-            //    Console.WriteLine("not a valid file name");
-            //}
-            //else
-            //{
-            //    Console.WriteLine("valid file name");
-            //    // file name is valid... May check for existence by calling fi.Exists.
-            //}
+            if (Directory.Exists(path))
+            {
+                logDir = path;
+                return;
+            }
 
-            if(Directory.Exists(path))
+            try
             {
-                Console.WriteLine("Valid path");
+                DirectoryInfo di = Directory.CreateDirectory(path);
+                Console.WriteLine("Created the new dir!");
+                logDir = path;
             }
-            else
+            catch(UnauthorizedAccessException) { Console.WriteLine("Access Denied"); }
+            catch(PathTooLongException) { Console.WriteLine("The specified path, file name, or both exceed the system-defined maximum length."); }
+            catch(ArgumentException) { Console.WriteLine("Invalid Path"); }
+            catch (DirectoryNotFoundException) { Console.WriteLine("Invalid Path"); }
+            catch(Exception e)
             {
-                Console.WriteLine("Doesn't exist");
+                Console.WriteLine("Error!");
             }
+        }
+        public string getPath()
+        {
+            return logDir;
         }
     }
 }
