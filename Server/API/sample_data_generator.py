@@ -4,13 +4,18 @@ import string
 def gen_action_k():
     return random.choice(string.ascii_letters)
 
+#def gen_list_m():
+
 
 def gen_list_k(dur_h, start_h, start_m, start_s, date):
-    secs = 0 #start_s
-    mins = 0 #start_m
-    hours = 0 #start_h
+    secs = start_s
+    mins = start_m
+    hours = start_h
+    secs_a = 0 #start_s
+    mins_a = 0 #start_m
+    hours_a = 0 #start_h
     out = []
-    while (hours*360 + mins*60 + secs) < dur_h*60*60:
+    while (hours_a*360 + mins_a*60 + secs_a) < dur_h*60*60:
         node = [date, hours, mins, secs, gen_action_k()]
         out.append(node)
         secs += 1
@@ -22,10 +27,19 @@ def gen_list_k(dur_h, start_h, start_m, start_s, date):
                 hours += 1
                 if hours == 24:
                     print("pisos") 
+        secs_a += 1
+        if secs_a == 60:
+            secs_a = 0
+            mins_a += 1
+            if mins_a == 60:
+                mins_a = 0
+                hours_a += 1
+                if hours_a == 24:
+                    print("pisos") 
     return out
 
-def print_doc(Name, out):
-    f = open("test_keyboard_log.txt", "w")
+def print_doc(name, out):
+    f = open(name, "w")
     for i in out:
         d = i[0]
         if i[1]<10:
