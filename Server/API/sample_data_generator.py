@@ -33,13 +33,13 @@ def print_doc(Name, out):
         else:
             h = str(i[1])
         if i[2]<10:
-            m = '0' + str(i[1])
+            m = '0' + str(i[2])
         else:
-            m = str(i[1])
+            m = str(i[2])
         if i[3]<10:
-            s = '0' + str(i[1])
+            s = '0' + str(i[3])
         else:
-            s = str(i[1])
+            s = str(i[3])
         a = i[4]
         line = d + ' ' + h + ':' + m + ':' + s + ' ' + a + '\n'
         f.write(line)
