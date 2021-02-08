@@ -23,6 +23,10 @@ namespace TrackzamClient
         public MainWindow()
         {
             InitializeComponent();
+            ActiveWindowLogger = new ActiveWindowLoggerClass(ActiveWindowLoggerTextBox);
         }
+
+
+        public ActiveWindowLoggerClass ActiveWindowLogger;
     }
 }
