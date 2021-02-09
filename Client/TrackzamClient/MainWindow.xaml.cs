@@ -38,5 +38,7 @@ namespace TrackzamClient
         {
 
         }
+        
+        public ActiveWindowLoggerClass ActiveWindowLogger;
     }
 }
