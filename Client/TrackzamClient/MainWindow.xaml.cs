@@ -20,13 +20,25 @@ namespace TrackzamClient
     /// </summary>
     public partial class MainWindow : Window
     {
+        Keylogger k;
         public MainWindow()
         {
             InitializeComponent();
-            ActiveWindowLogger = new ActiveWindowLoggerClass(ActiveWindowLoggerTextBox);
+            k = new Keylogger();
+            k.setPath(@"C:\\Test");
+            k.Start();
         }
 
+        void MainWindow_Closing(object sender, EventArgs args)
+        {
+            k.Stop();
+        }
 
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+
+        }
+        
         public ActiveWindowLoggerClass ActiveWindowLogger;
     }
 }
