@@ -7,5 +7,4 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" Closing="MainWindow_Closing">
         <TextBox x:Name="ActiveWindowLoggerTextBox" HorizontalAlignment="Left" Margin="0,0,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="799" Height="200"/>
-    </Grid>
 </Window>
