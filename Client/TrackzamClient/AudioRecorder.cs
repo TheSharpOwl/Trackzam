@@ -25,17 +25,19 @@ namespace TrackzamClient
     {
         WaveIn waveIn;
         WaveFileWriter writer;
-        private string outputFilename = "default-name";
+        private string outputFilename = "default-name.wav";
         private Window _window;
         
         public AudioRecorder(Window caller)
         {
             _window = caller;
             Keyboard.AddKeyDownHandler(_window, new KeyEventHandler(OnKeyDown));
+            
         }
 
         private void OnKeyDown(object sender, System.Windows.Input.KeyEventArgs keyEventArgs)
         {
+            //MessageBox.Show(keyEventArgs.Key.ToString());
             if (keyEventArgs.Key == Key.S)
             {
                 StartRecord();
