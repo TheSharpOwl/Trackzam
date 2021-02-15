@@ -5,11 +5,13 @@ namespace TrackzamClient
 {
     public class SessionManager
     {
+        public bool IsSessionInProgress;
         public SessionManager()
         {
             _sessionName = new StringBuilder();
+            IsSessionInProgress = false;
         }
-
+        
         public void StartNewSession(ActiveWindowLoggerClass windowLogger, Keylogger keylogger, AudioRecorder audioRecorder)
         {
             _windowLogger = windowLogger;
@@ -22,16 +24,20 @@ namespace TrackzamClient
                 .Append('-').Append(timeNow.Hour).Append('-').Append(timeNow.Minute).Append('-')
                 .Append(timeNow.Second).Append('-').Append(timeNow.Millisecond).Append('-');
             
-            string myDocymentsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            System.IO.Directory.CreateDirectory(myDocymentsFolder+"/Trackzam");
-            _sessionFolderPath = System.IO.Directory.CreateDirectory(myDocymentsFolder+"/Trackzam/"+_sessionName).FullName;
+            string myDocumentsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            System.IO.Directory.CreateDirectory(myDocumentsFolder+"/Trackzam");
+            _sessionFolderPath = System.IO.Directory.CreateDirectory(myDocumentsFolder+"/Trackzam/"+_sessionName).FullName;
+            
+            _audioRecorder.StartRecord(_sessionFolderPath);
+            IsSessionInProgress = true;
         }
 
         public void EndSession()
         {
+            _audioRecorder.StopRecording();
             System.Diagnostics.Process.Start("explorer.exe", _sessionFolderPath);
         }
-
+        
         private StringBuilder _sessionName;
         private string _sessionFolderPath;
         private ActiveWindowLoggerClass _windowLogger;

@@ -25,11 +25,37 @@ namespace TrackzamClient
         public MainWindow()
         {
             InitializeComponent();
-            ActiveWindowLogger = new ActiveWindowLoggerClass(ActiveWindowLoggerTextBox);
+            InitializeStartButton();
+            //ActiveWindowLogger = new ActiveWindowLoggerClass(ActiveWindowLoggerTextBox);
             _audioRecorder = new AudioRecorder(this);
             k = new Keylogger();
             k.setPath(@"C:\\Test");
             k.Start();
+            _sessionManager = new SessionManager();
+        }
+
+        private void InitializeStartButton()
+        {
+            var sp = new StackPanel();
+            startSessionButton = new Button();
+            startSessionButton.Content = "Start Recording Session";
+            startSessionButton.Click += Session_control;
+            sp.Children.Add(startSessionButton);
+            this.AddChild(sp);
+        }
+
+        private void Session_control(object sender, RoutedEventArgs routedEventArgs)
+        {
+            if (_sessionManager.IsSessionInProgress)
+            {
+                _sessionManager.EndSession();
+                startSessionButton.Content = "Start Recording";
+            }
+            else
+            {
+                _sessionManager.StartNewSession(ActiveWindowLogger, k, _audioRecorder);
+                startSessionButton.Content = "Stop Recording";
+            }
         }
 
         void MainWindow_Closing(object sender, EventArgs args)
@@ -41,8 +67,10 @@ namespace TrackzamClient
         {
 
         }
-            
+
+        private Button startSessionButton;
         public ActiveWindowLoggerClass ActiveWindowLogger;
         private AudioRecorder _audioRecorder;
+        private SessionManager _sessionManager;
     }
 }

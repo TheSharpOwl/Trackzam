@@ -26,7 +26,6 @@ namespace TrackzamClient
         public AudioRecorder(Window caller)
         {
             _window = caller;
-            //Keyboard.AddKeyDownHandler(_window, new KeyEventHandler(OnKeyDown));
         }
 
         private void OnKeyDown(object sender, System.Windows.Input.KeyEventArgs keyEventArgs)
@@ -51,7 +50,7 @@ namespace TrackzamClient
             
             _waveIn.WaveFormat = new WaveFormat(8000, 1);
             
-            _writer = new WaveFileWriter(_outputFilename, _waveIn.WaveFormat);
+            _writer = new WaveFileWriter(_outputFilename+"\\microphone.wav", _waveIn.WaveFormat);
             
             _waveIn.StartRecording();
         }
@@ -61,7 +60,7 @@ namespace TrackzamClient
             _writer.WriteData(e.Buffer, 0, e.BytesRecorded);
         }
         
-        private void StopRecording()
+        public void StopRecording()
         {
             MessageBox.Show("StopRecording");
             _waveIn.StopRecording();
