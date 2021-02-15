@@ -31,6 +31,9 @@ namespace TrackzamClient
             k = new Keylogger();
             k.SetPath(@"C:\\Test");
             k.Start();
+
+            ActiveWindowLogger.StartLogging("C:\\Users\\Public\\ActiveWindowLogs");
+
             _sessionManager = new SessionManager();
         }
 
@@ -56,11 +59,13 @@ namespace TrackzamClient
                 _sessionManager.StartNewSession(ActiveWindowLogger, k, _audioRecorder);
                 startSessionButton.Content = "Stop Recording";
             }
+
         }
 
         void MainWindow_Closing(object sender, EventArgs args)
         {
             k.Stop();
+            ActiveWindowLogger.StopLogging();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
