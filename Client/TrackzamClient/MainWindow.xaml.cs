@@ -65,20 +65,6 @@ namespace TrackzamClient
 
         }
 
-        private void Session_control(object sender, RoutedEventArgs routedEventArgs)
-        {
-            if (_sessionManager.IsSessionInProgress)
-            {
-                _sessionManager.EndSession();
-                startSessionButton.Content = "Start Recording";
-            }
-            else
-            {
-                _sessionManager.StartNewSession(ActiveWindowLogger, k, _audioRecorder);
-                startSessionButton.Content = "Stop Recording";
-            }
-
-        }
 
         void MainWindow_Closing(object sender, EventArgs args)
         {
