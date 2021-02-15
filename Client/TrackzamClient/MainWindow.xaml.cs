@@ -29,7 +29,7 @@ namespace TrackzamClient
             //ActiveWindowLogger = new ActiveWindowLoggerClass(ActiveWindowLoggerTextBox);
             _audioRecorder = new AudioRecorder(this);
             k = new Keylogger();
-            k.setPath(@"C:\\Test");
+            k.SetPath(@"C:\\Test");
             k.Start();
             _sessionManager = new SessionManager();
         }
