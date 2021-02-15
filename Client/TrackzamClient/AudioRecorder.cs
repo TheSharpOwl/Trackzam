@@ -23,24 +23,16 @@ namespace TrackzamClient
 {
     public class AudioRecorder
     {
-        WaveIn waveIn;
-        WaveFileWriter writer;
-        private string outputFilename = "default-name.wav";
-        private Window _window;
-        
         public AudioRecorder(Window caller)
         {
             _window = caller;
-            Keyboard.AddKeyDownHandler(_window, new KeyEventHandler(OnKeyDown));
-            
         }
 
         private void OnKeyDown(object sender, System.Windows.Input.KeyEventArgs keyEventArgs)
         {
-            //MessageBox.Show(keyEventArgs.Key.ToString());
             if (keyEventArgs.Key == Key.S)
             {
-                StartRecord();
+                StartRecord("default-name.wav");
             }
             if (keyEventArgs.Key == Key.F)
             {
@@ -48,39 +40,43 @@ namespace TrackzamClient
             }
         }
 
-        void StartRecord()
+        public void StartRecord(string filePath)
         {
-            MessageBox.Show("Start Recording");
-            waveIn = new WaveIn();
-            waveIn.DeviceNumber = 0;
-            waveIn.DataAvailable += waveIn_DataAvailable;
-            waveIn.RecordingStopped += waveIn_RecordingStopped;
+            _outputFilename = filePath;
+            _waveIn = new WaveIn();
+            _waveIn.DeviceNumber = 0;
+            _waveIn.DataAvailable += waveIn_DataAvailable;
+            _waveIn.RecordingStopped += waveIn_RecordingStopped;
             
-            waveIn.WaveFormat = new WaveFormat(8000, 1);
+            _waveIn.WaveFormat = new WaveFormat(8000, 1);
             
-            writer = new WaveFileWriter(outputFilename, waveIn.WaveFormat);
+            _writer = new WaveFileWriter(_outputFilename+"\\microphone.wav", _waveIn.WaveFormat);
             
-            waveIn.StartRecording();
+            _waveIn.StartRecording();
         }
         
-        void waveIn_DataAvailable(object sender, WaveInEventArgs e)
+        private void waveIn_DataAvailable(object sender, WaveInEventArgs e)
         {
-            writer.WriteData(e.Buffer, 0, e.BytesRecorded);
+            _writer.WriteData(e.Buffer, 0, e.BytesRecorded);
         }
         
-        void StopRecording()
+        public void StopRecording()
         {
             MessageBox.Show("StopRecording");
-            waveIn.StopRecording();
+            _waveIn.StopRecording();
         }
         
         private void waveIn_RecordingStopped(object sender, EventArgs e)
         {
-            waveIn.Dispose();
-            waveIn = null;
-            writer.Close();
-            writer = null;
+            _waveIn.Dispose();
+            _waveIn = null;
+            _writer.Close();
+            _writer = null;
         }
-
+        
+        private WaveIn _waveIn;
+        private WaveFileWriter _writer;
+        private string _outputFilename = "default-name.wav";
+        private readonly Window _window;
     }
 }
