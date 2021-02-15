@@ -16,7 +16,6 @@ namespace TrackzamClient
 
         private List<String> _logs;
 
-        private TextBox _outputTextBox;
 
         public void StartLogging(String dir)
         {
@@ -29,6 +28,10 @@ namespace TrackzamClient
 
         public void StopLogging()
         {
+            if (!IsLogging)
+            {
+                return;
+            }
             IsLogging = false;
             StringBuilder outputStringBuilder = new StringBuilder();
             foreach (var item in _logs)
@@ -48,15 +51,13 @@ namespace TrackzamClient
         void AddLogItem(String newLog) 
         {
             _logs.Add(newLog);
-            _outputTextBox.Text += newLog + "\r\n";
         }
 
 
 
-        public ActiveWindowLoggerClass(TextBox outputTextBox)
+        public ActiveWindowLoggerClass()
         {
-            _outputTextBox = outputTextBox;
-            _outputTextBox.Text = "";
+            
             dele = new WinEventDelegate(WinEventProc);
             IntPtr m_hhook = SetWinEventHook(EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_FOREGROUND, IntPtr.Zero, dele, 0, 0, WINEVENT_OUTOFCONTEXT);
         }
