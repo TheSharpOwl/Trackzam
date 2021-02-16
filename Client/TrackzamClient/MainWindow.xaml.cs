@@ -16,8 +16,6 @@ namespace TrackzamClient
             _startSessionButton = InitializeStartButton(_stackPanel);
             textBox = InitializeTextBox(_stackPanel);
             AddChild(_stackPanel);
-            
-            //ActiveWindowLogger = new ActiveWindowLoggerClass(ActiveWindowLoggerTextBox);
             _sessionManager = new SessionManager(this);
         }
 
@@ -49,7 +47,9 @@ namespace TrackzamClient
                 _sessionManager.StartNewSession();
                 _startSessionButton.Content = "Stop Recording";
             }
+
         }
+
 
         void MainWindow_Closing(object sender, EventArgs args)
         {
