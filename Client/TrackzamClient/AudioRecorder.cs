@@ -49,7 +49,6 @@ namespace TrackzamClient
         
         public void StopRecording()
         {
-            MessageBox.Show("StopRecording");
             _waveIn.StopRecording();
         }
         

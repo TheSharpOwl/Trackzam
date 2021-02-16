@@ -29,10 +29,13 @@ namespace TrackzamClient
 
         public void EndSession()
         {
-            _audioRecorder.StopRecording();
-            _keylogger.Stop();
-            _windowLogger.StopLogging();
-            System.Diagnostics.Process.Start("explorer.exe", _sessionFolderPath);
+            if (IsSessionInProgress)
+            {
+                _audioRecorder.StopRecording();
+                _keylogger.Stop();
+                _windowLogger.StopLogging();
+                System.Diagnostics.Process.Start("explorer.exe", _sessionFolderPath);   
+            }
         }
         
         private string _sessionFolderPath;
