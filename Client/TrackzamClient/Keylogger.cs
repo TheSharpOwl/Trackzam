@@ -1,54 +1,41 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Threading;
 
 
 namespace TrackzamClient
 {
     public class Keylogger
-    {  
-        [DllImport("user32.dll")]
-        public static extern int GetAsyncKeyState(Int32 i);
-
-        protected string logDir = "";
-        private StreamWriter writer;
-        private DispatcherTimer timer;
-
+    {
         public Keylogger(Window window)
         {
             Keyboard.AddKeyDownHandler(window, OnKeyDown);
-            isRecording = false;
+            _isRecording = false;
         }
 
         // for clients read-only
-        public string Path
-        {
-            get => logDir;
-        }
+        public string Path => _logDir;
 
         public void Start(string path)
         {
             SetPath(path);
-            string fileName = "\\" + TrackzamTimer.GetNowString();
-            writer = new StreamWriter(logDir + fileName);
-            isRecording = true;
+            string fileName = "\\KeyLog.txt";
+            _writer = new StreamWriter(_logDir + fileName);
+            _isRecording = true;
         }
 
         public void Stop()
         {
-            writer.WriteLine("//Closed the Window//");
-            writer.Close();
+            _writer.Close();
+            _isRecording = false;
         }
         
         private void OnKeyDown(object sender, KeyEventArgs keyEventArgs)
         {
-            if (isRecording)
+            if (_isRecording)
             {
-                writer.WriteLine("< {0} {1} >", keyEventArgs.Key.ToString(), TrackzamTimer.GetNowString());
+                _writer.WriteLine("< {0} {1} >", keyEventArgs.Key.ToString(), TrackzamTimer.GetNowString());
             }
         }
         
@@ -57,7 +44,7 @@ namespace TrackzamClient
         {
             if (Directory.Exists(path))
             {
-                logDir = path;
+                _logDir = path;
                 return true;
             }
 
@@ -65,7 +52,7 @@ namespace TrackzamClient
             {
                 DirectoryInfo di = Directory.CreateDirectory(path);
                 Console.WriteLine("Created the new dir!");
-                logDir = path;
+                _logDir = path;
                 return true;
             }
             catch (UnauthorizedAccessException) { Console.WriteLine("Access Denied"); return false; }
@@ -79,7 +66,9 @@ namespace TrackzamClient
             }
 
         }
-
-        private bool isRecording;
+        
+        private string _logDir = "";
+        private StreamWriter _writer;
+        private bool _isRecording;
     }
 }

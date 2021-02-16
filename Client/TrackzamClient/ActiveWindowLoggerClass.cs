@@ -1,28 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Windows.Controls;
 
 namespace TrackzamClient
 {
     public class ActiveWindowLoggerClass
     {
         private bool IsLogging = false;
-        private String timestampOfLogging;
         private String directory;
-
         private List<String> _logs;
-
-
+        
         public void StartLogging(String dir)
         {
             directory = dir;
             IsLogging = true;
-
-            timestampOfLogging = DateTime.UtcNow.ToString("dd'.'MM'.'yyyy HH-mm-ss");
             _logs = new List<String>();
         }
 
@@ -40,7 +33,7 @@ namespace TrackzamClient
                 outputStringBuilder.Append("\r\n");
             }
 
-            String filepath = directory + "\\" + timestampOfLogging + ".txt";
+            String filepath = directory + "\\ActiveWindowLog.txt";
 
             if(!Directory.Exists(directory)){
                 Directory.CreateDirectory(directory);
@@ -48,7 +41,7 @@ namespace TrackzamClient
             File.WriteAllText(filepath, outputStringBuilder.ToString());
         }
 
-        void AddLogItem(String newLog) 
+        private void AddLogItem(String newLog) 
         {
             _logs.Add(newLog);
         }
@@ -91,7 +84,7 @@ namespace TrackzamClient
             return null;
         }
 
-        public void WinEventProc(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
+        private void WinEventProc(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
         {
             if (IsLogging)
             {
