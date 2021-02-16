@@ -31,6 +31,7 @@ namespace TrackzamClient
         {
             if (IsSessionInProgress)
             {
+                IsSessionInProgress = false;
                 _audioRecorder.StopRecording();
                 _keylogger.Stop();
                 _windowLogger.StopLogging();

@@ -1,32 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Windows.Controls;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Text;
-using System.IO;
 using System.Windows;
-using System.Windows.Input;
 using NAudio.Wave;
-using NAudio.FileFormats;
-using NAudio.CoreAudioApi;
-using NAudio;
-using NAudio.WinForms;
-using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
-using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace TrackzamClient
 {
     public class AudioRecorder
     {
-        public AudioRecorder()
-        {
-        }
-
         public void StartRecord(string filePath)
         {
             _outputFilename = filePath;
@@ -44,7 +23,7 @@ namespace TrackzamClient
         
         private void waveIn_DataAvailable(object sender, WaveInEventArgs e)
         {
-            _writer.WriteData(e.Buffer, 0, e.BytesRecorded);
+            _writer.Write(e.Buffer, 0, e.BytesRecorded);
         }
         
         public void StopRecording()
@@ -63,6 +42,5 @@ namespace TrackzamClient
         private WaveIn _waveIn;
         private WaveFileWriter _writer;
         private string _outputFilename = "default-name.wav";
-        private readonly Window _window;
     }
 }
