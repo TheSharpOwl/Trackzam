@@ -1,51 +1,38 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace TrackzamClient
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public sealed partial class MainWindow : Window
     {
-        private String PATH_ACTIVE_WINDOW_LOGGER = "C:\\ActiveWindowLogs";
-        Keylogger k;
         public MainWindow()
         {
+            _stackPanel = new StackPanel();
             InitializeComponent();
-            InitializeStartButton();
-            ActiveWindowLogger = new ActiveWindowLoggerClass();
-            _audioRecorder = new AudioRecorder(this);
-            k = new Keylogger();
-            k.SetPath(@"C:\\Test");
-            k.Start();
-
-            
-
-            _sessionManager = new SessionManager();
+            _startSessionButton = InitializeStartButton(_stackPanel);
+            textBox = InitializeTextBox(_stackPanel);
+            AddChild(_stackPanel);
+            _sessionManager = new SessionManager(this);
         }
 
-        private void InitializeStartButton()
+        private Button InitializeStartButton(StackPanel stackPanel)
         {
-            var sp = new StackPanel();
-            startSessionButton = new Button();
-            startSessionButton.Content = "Start Recording Session";
-            startSessionButton.Click += Session_control;
-            sp.Children.Add(startSessionButton);
-            this.AddChild(sp);
+            Button button = new Button();
+            button.Content = "Start Recording Session";
+            button.Click += Session_control;
+            stackPanel.Children.Add(button);
+            return button;
+        }
+
+        private TextBox InitializeTextBox(StackPanel stackPanel)
+        {
+            TextBox textBox = new TextBox();
+            stackPanel.Children.Add(textBox);
+            return textBox;
         }
 
         private void Session_control(object sender, RoutedEventArgs routedEventArgs)
@@ -53,14 +40,12 @@ namespace TrackzamClient
             if (_sessionManager.IsSessionInProgress)
             {
                 _sessionManager.EndSession();
-                startSessionButton.Content = "Start Recording";
-                ActiveWindowLogger.StopLogging();
+                _startSessionButton.Content = "Start Recording";
             }
             else
             {
-                _sessionManager.StartNewSession(ActiveWindowLogger, k, _audioRecorder);
-                startSessionButton.Content = "Stop Recording";
-                ActiveWindowLogger.StartLogging(PATH_ACTIVE_WINDOW_LOGGER);
+                _sessionManager.StartNewSession();
+                _startSessionButton.Content = "Stop Recording";
             }
 
         }
@@ -68,8 +53,7 @@ namespace TrackzamClient
 
         void MainWindow_Closing(object sender, EventArgs args)
         {
-            k.Stop();
-           
+            _sessionManager.EndSession();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -77,9 +61,9 @@ namespace TrackzamClient
 
         }
 
-        private Button startSessionButton;
-        public ActiveWindowLoggerClass ActiveWindowLogger;
-        private AudioRecorder _audioRecorder;
+        private StackPanel _stackPanel;
+        public TextBox textBox;
+        private Button _startSessionButton;
         private SessionManager _sessionManager;
     }
 }

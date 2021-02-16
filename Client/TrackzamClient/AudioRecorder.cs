@@ -23,21 +23,8 @@ namespace TrackzamClient
 {
     public class AudioRecorder
     {
-        public AudioRecorder(Window caller)
+        public AudioRecorder()
         {
-            _window = caller;
-        }
-
-        private void OnKeyDown(object sender, System.Windows.Input.KeyEventArgs keyEventArgs)
-        {
-            if (keyEventArgs.Key == Key.S)
-            {
-                StartRecord("default-name.wav");
-            }
-            if (keyEventArgs.Key == Key.F)
-            {
-                StopRecording();
-            }
         }
 
         public void StartRecord(string filePath)
