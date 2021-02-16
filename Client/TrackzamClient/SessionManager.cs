@@ -10,7 +10,7 @@ namespace TrackzamClient
         {
             _mainWindow = mainWindow;
             IsSessionInProgress = false;
-            //_windowLogger = new ActiveWindowLoggerClass(mainWindow.textBox);
+            _windowLogger = new ActiveWindowLoggerClass();
             _audioRecorder = new AudioRecorder();
             _keylogger = new Keylogger(mainWindow);
         }
@@ -23,6 +23,7 @@ namespace TrackzamClient
             
             _audioRecorder.StartRecord(_sessionFolderPath);
             _keylogger.Start(_sessionFolderPath);
+            _windowLogger.StartLogging(_sessionFolderPath);
             IsSessionInProgress = true;
         }
 
@@ -30,6 +31,7 @@ namespace TrackzamClient
         {
             _audioRecorder.StopRecording();
             _keylogger.Stop();
+            _windowLogger.StopLogging();
             System.Diagnostics.Process.Start("explorer.exe", _sessionFolderPath);
         }
         
