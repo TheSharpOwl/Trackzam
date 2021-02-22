@@ -1,31 +1,56 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Windows.Controls;
 
 namespace TrackzamClient
 {
     public class ActiveWindowLoggerClass
     {
-        private List<String> _logs = new List<String>();
+        private bool IsLogging = false;
+        private String directory;
+        private List<String> _logs;
+        
+        public void StartLogging(String dir)
+        {
+            directory = dir;
+            IsLogging = true;
+            _logs = new List<String>();
+        }
 
-        private TextBox _outputTextBox;
+        public void StopLogging()
+        {
+            if (!IsLogging)
+            {
+                return;
+            }
+            IsLogging = false;
+            StringBuilder outputStringBuilder = new StringBuilder();
+            foreach (var item in _logs)
+            {
+                outputStringBuilder.Append(item);
+                outputStringBuilder.Append("\r\n");
+            }
 
+            String filepath = directory + "\\ActiveWindowLog.txt";
 
+            if(!Directory.Exists(directory)){
+                Directory.CreateDirectory(directory);
+            }
+            File.WriteAllText(filepath, outputStringBuilder.ToString());
+        }
 
-        void AddLogItem(String newLog)
+        private void AddLogItem(String newLog) 
         {
             _logs.Add(newLog);
         }
 
 
 
-        public ActiveWindowLoggerClass(TextBox outputTextBox)
+        public ActiveWindowLoggerClass()
         {
-            _outputTextBox = outputTextBox;
-            _outputTextBox.Text = "";
+            
             dele = new WinEventDelegate(WinEventProc);
             IntPtr m_hhook = SetWinEventHook(EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_FOREGROUND, IntPtr.Zero, dele, 0, 0, WINEVENT_OUTOFCONTEXT);
         }
@@ -59,11 +84,17 @@ namespace TrackzamClient
             return null;
         }
 
-        public void WinEventProc(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
+        private void WinEventProc(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
         {
-            String newLogString = DateTime.UtcNow.ToString("dd'/'MM'/'yyyy HH:mm:ss") + " " + GetActiveWindowTitle();
-            AddLogItem(newLogString);
-            _outputTextBox.Text += newLogString + "\r\n";
+            if (IsLogging)
+            {
+                String newLogString =
+                    DateTime.UtcNow.ToString("dd'/'MM'/'yyyy HH:mm:ss") + " " + GetActiveWindowTitle();
+                AddLogItem(newLogString);
+
+            }
+
+            
         }
 
     }
