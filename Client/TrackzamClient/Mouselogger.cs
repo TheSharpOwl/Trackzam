@@ -21,6 +21,7 @@ namespace TrackzamClient
             SetPath(path);
             _writer = new StreamWriter(_logDir, true);
             _isRecording = true;
+            lastMousePos.x = lastMousePos.y = -1;
             // start the hook
             _hookID = SetHook(_proc);
         }
@@ -96,7 +97,21 @@ namespace TrackzamClient
                         typeMsg = "Moving";
                         break;
                 }
+                if(typeMsg == "Moving")
+                {
+                    if (lastMousePos.x < 0)
+                        lastMousePos = hookStruct.pt;
 
+                    if (dist(lastMousePos, hookStruct.pt) < throttle * throttle)
+                    {
+                        return CallNextHookEx(_hookID, nCode, wParam, lParam);
+                    }
+                    else
+                    {
+                        lastMousePos = hookStruct.pt;
+                    }
+
+                }
                 if(!String.IsNullOrEmpty(typeMsg))
                     _writer.WriteLine("{0} {1},{2} {3}", typeMsg, hookStruct.pt.x, hookStruct.pt.y, timeMsg);
             }
@@ -150,11 +165,19 @@ namespace TrackzamClient
             public IntPtr dwExtraInfo;
         }
 
+        private int dist(POINT first, POINT second)
+        {
+            return (first.x - second.x) * (first.x - second.x) + (first.y - second.y) * (first.y - second.y);
+        }
+
         protected string _logDir = "";
         private StreamWriter _writer;
         private LowLevelMouseProc _proc;
         private IntPtr _hookID = IntPtr.Zero;
         private const int WH_MOUSE_LL = 14;
         private bool _isRecording = false;
+        private POINT lastMousePos;
+        private const int throttle = 1000;
+
     }
 }
