@@ -82,6 +82,7 @@ namespace TrackzamClient
 
         public delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
 
+        public delegate IntPtr LowLevelMouseProc(int ncode, IntPtr wParam, IntPtr lParam);
         public IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
         {
             if (nCode >= 0 && wParam == (IntPtr)WM_KEYDOWN)
@@ -124,7 +125,8 @@ namespace TrackzamClient
 
         private const int WH_KEYBOARD_LL = 13;
         private const int WM_KEYDOWN = 0x0100;
-        public LowLevelKeyboardProc _proc;
-        public IntPtr _hookID = IntPtr.Zero;
+        private const int WM_LBUTTONDOWN = 0x0201;
+        private LowLevelKeyboardProc _proc;
+        private IntPtr _hookID = IntPtr.Zero;
     }
 }
