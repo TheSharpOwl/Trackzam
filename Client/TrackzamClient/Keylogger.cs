@@ -70,7 +70,7 @@ namespace TrackzamClient
         // for clients read-only
 
 
-        public IntPtr SetHook(LowLevelKeyboardProc proc)
+        private IntPtr SetHook(LowLevelKeyboardProc proc)
         {
             using (Process curProcess = Process.GetCurrentProcess())
             using (ProcessModule curModule = curProcess.MainModule)
@@ -80,10 +80,10 @@ namespace TrackzamClient
             }
         }
 
-        public delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
+        private delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
 
-        public delegate IntPtr LowLevelMouseProc(int ncode, IntPtr wParam, IntPtr lParam);
-        public IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
+        private delegate IntPtr LowLevelMouseProc(int ncode, IntPtr wParam, IntPtr lParam);
+        private IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
         {
             if (nCode >= 0 && wParam == (IntPtr)WM_KEYDOWN)
             {
@@ -96,10 +96,6 @@ namespace TrackzamClient
 
 
         // dll imports for the keylogger functionality
-
-        // TODO delete these 2 lines
-        [DllImport("user32.dll")]
-        public static extern int GetAsyncKeyState(Int32 i);
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern IntPtr SetWindowsHookEx(int idHook,
@@ -123,10 +119,12 @@ namespace TrackzamClient
         private StreamWriter _writer;
         private bool _isRecording = false;
 
+        // TODO rename the process with better names
+        private LowLevelKeyboardProc _proc;
+
+        private IntPtr _hookID = IntPtr.Zero;
+
         private const int WH_KEYBOARD_LL = 13;
         private const int WM_KEYDOWN = 0x0100;
-        private const int WM_LBUTTONDOWN = 0x0201;
-        private LowLevelKeyboardProc _proc;
-        private IntPtr _hookID = IntPtr.Zero;
     }
 }
