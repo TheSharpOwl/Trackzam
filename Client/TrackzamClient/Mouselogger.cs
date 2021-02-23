@@ -78,25 +78,27 @@ namespace TrackzamClient
             if (nCode >= 0)
             {
                 MSLLHOOKSTRUCT hookStruct = (MSLLHOOKSTRUCT)Marshal.PtrToStructure(lParam, typeof(MSLLHOOKSTRUCT));
-                string msg = "";
+                string typeMsg = "";
+                string timeMsg = TrackzamTimer.GetNowClockString();
+
                 switch ((MouseMessages)wParam)
                 {
                     case MouseMessages.WM_LBUTTONDOWN: // left mouse click is down
-                        msg = "Left Click";
+                        typeMsg = "Left Click";
                         break;
                     case MouseMessages.WM_RBUTTONDOWN: // right mouse click is down
-                        msg = "Right Click";
+                        typeMsg = "Right Click";
                         break;
                     case MouseMessages.WM_MOUSEWHEEL: // right mouse click is down
-                        msg = "Wheel";
+                        typeMsg = "Wheel";
                         break;
                     case MouseMessages.WM_MOUSEMOVE: // right mouse click is down
-                        msg = "Moving";
+                        typeMsg = "Moving";
                         break;
                 }
 
-                if(!String.IsNullOrEmpty(msg))
-                    _writer.WriteLine(msg + " at " + hookStruct.pt.x + ", " + hookStruct.pt.y);
+                if(!String.IsNullOrEmpty(typeMsg))
+                    _writer.WriteLine("{0} {1},{2} {3}", typeMsg, hookStruct.pt.x, hookStruct.pt.y, timeMsg);
             }
 
             return CallNextHookEx(_hookID, nCode, wParam, lParam);
