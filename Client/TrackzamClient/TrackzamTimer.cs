@@ -15,5 +15,13 @@ namespace TrackzamClient
             // the name of the file should be in this format
             return timeNow.ToString("yyyy-MM-dd-HH-mm-ss-") + ms.ToString();
         }
+
+        public static string GetNowClockString()
+        {
+             DateTime timeNow = DateTime.Now;
+            string ms = timeNow.Millisecond.ToString();
+            // the name of the file should be in this format
+            return timeNow.ToString("HH-mm-ss-") + ms.ToString();
+        }
     }
 }

@@ -1,26 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
-using System.Windows.Input;
-using System.Windows.Threading;
-using System.Windows.Forms;
-using System.Threading;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace TrackzamClient
 {
-    public class Keylogger
+    class Mouselogger
     {
-
-        public Keylogger()
+        public Mouselogger()
         {
-            // set the correct process as our keyboard hook BUT don't start it yet
             _proc = HookCallback;
-        }
-
-        public string Path
-        {
-            get => _logDir;
         }
 
         public void Start(string path)
@@ -31,6 +24,7 @@ namespace TrackzamClient
             // start the hook
             _hookID = SetHook(_proc);
         }
+
         public void Stop()
         {
             // stop the keyboard hook
@@ -39,12 +33,11 @@ namespace TrackzamClient
             _writer.Close();
         }
 
-        // returns true if the path is set successfully without errors
         public bool SetPath(string path)
         {
             if (Directory.Exists(path))
             {
-                _logDir = path + "\\Keylog.txt";
+                _logDir = path + "\\Mouselog.txt";
                 return true;
             }
 
@@ -67,38 +60,54 @@ namespace TrackzamClient
 
         }
 
-        // for clients read-only
 
+        private delegate IntPtr LowLevelMouseProc(int nCode, IntPtr wParam, IntPtr lParam);
 
-        private IntPtr SetHook(LowLevelKeyboardProc proc)
+        private IntPtr SetHook(LowLevelMouseProc proc)
         {
             using (Process curProcess = Process.GetCurrentProcess())
             using (ProcessModule curModule = curProcess.MainModule)
             {
-                return SetWindowsHookEx(WH_KEYBOARD_LL, proc,
+                return SetWindowsHookEx(WH_MOUSE_LL, proc,
                     GetModuleHandle(curModule.ModuleName), 0);
             }
         }
 
-        private delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
-
-        private delegate IntPtr LowLevelMouseProc(int ncode, IntPtr wParam, IntPtr lParam);
         private IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
         {
-            if (nCode >= 0 && wParam == (IntPtr)WM_KEYDOWN)
+            if (nCode >= 0)
             {
-                int vkCode = Marshal.ReadInt32(lParam);
-                _writer.WriteLine("{0} {1}", (Keys)vkCode, TrackzamTimer.GetNowClockString());
+                MSLLHOOKSTRUCT hookStruct = (MSLLHOOKSTRUCT)Marshal.PtrToStructure(lParam, typeof(MSLLHOOKSTRUCT));
+                string typeMsg = "";
+                string timeMsg = TrackzamTimer.GetNowClockString();
+
+                switch ((MouseMessages)wParam)
+                {
+                    case MouseMessages.WM_LBUTTONDOWN: // left mouse click is down
+                        typeMsg = "Left Click";
+                        break;
+                    case MouseMessages.WM_RBUTTONDOWN: // right mouse click is down
+                        typeMsg = "Right Click";
+                        break;
+                    case MouseMessages.WM_MOUSEWHEEL: // mouse wheel is being used
+                        typeMsg = "Wheel";
+                        break;
+                    case MouseMessages.WM_MOUSEMOVE: // mouse is moving
+                        typeMsg = "Moving";
+                        break;
+                }
+
+                if(!String.IsNullOrEmpty(typeMsg))
+                    _writer.WriteLine("{0} {1},{2} {3}", typeMsg, hookStruct.pt.x, hookStruct.pt.y, timeMsg);
             }
+
             return CallNextHookEx(_hookID, nCode, wParam, lParam);
         }
 
-
-        // dll imports for the keylogger functionality
-
+        // dll Imporrts
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern IntPtr SetWindowsHookEx(int idHook,
-            LowLevelKeyboardProc lpfn, IntPtr hMod, uint dwThreadId);
+        LowLevelMouseProc lpfn, IntPtr hMod, uint dwThreadId);
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
@@ -112,18 +121,40 @@ namespace TrackzamClient
         private static extern IntPtr GetModuleHandle(string lpModuleName);
 
 
-        // class variable members
+
+        // class members
+        private enum MouseMessages
+        {
+            WM_LBUTTONDOWN = 0x0201,
+            WM_LBUTTONUP = 0x0202,
+            WM_MOUSEMOVE = 0x0200,
+            WM_MOUSEWHEEL = 0x020A,
+            WM_RBUTTONDOWN = 0x0204,
+            WM_RBUTTONUP = 0x0205
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct POINT
+        {
+            public int x;
+            public int y;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct MSLLHOOKSTRUCT
+        {
+            public POINT pt;
+            public uint mouseData;
+            public uint flags;
+            public uint time;
+            public IntPtr dwExtraInfo;
+        }
 
         protected string _logDir = "";
         private StreamWriter _writer;
-        private bool _isRecording = false;
-
-        // TODO rename the process with better names
-        private LowLevelKeyboardProc _proc;
-
+        private LowLevelMouseProc _proc;
         private IntPtr _hookID = IntPtr.Zero;
-
-        private const int WH_KEYBOARD_LL = 13;
-        private const int WM_KEYDOWN = 0x0100;
+        private const int WH_MOUSE_LL = 14;
+        private bool _isRecording = false;
     }
 }
