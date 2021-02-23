@@ -73,15 +73,32 @@ namespace TrackzamClient
             }
         }
 
-        private IntPtr HookCallback(
-        int nCode, IntPtr wParam, IntPtr lParam)
+        private IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
         {
-            if (nCode >= 0 &&
-                MouseMessages.WM_LBUTTONDOWN == (MouseMessages)wParam)
+            if (nCode >= 0)
             {
                 MSLLHOOKSTRUCT hookStruct = (MSLLHOOKSTRUCT)Marshal.PtrToStructure(lParam, typeof(MSLLHOOKSTRUCT));
-               _writer.WriteLine(hookStruct.pt.x + ", " + hookStruct.pt.y);
+                string msg = "";
+                switch ((MouseMessages)wParam)
+                {
+                    case MouseMessages.WM_LBUTTONDOWN: // left mouse click is down
+                        msg = "Left Click";
+                        break;
+                    case MouseMessages.WM_RBUTTONDOWN: // right mouse click is down
+                        msg = "Right Click";
+                        break;
+                    case MouseMessages.WM_MOUSEWHEEL: // right mouse click is down
+                        msg = "Wheel";
+                        break;
+                    case MouseMessages.WM_MOUSEMOVE: // right mouse click is down
+                        msg = "Moving";
+                        break;
+                }
+
+                if(!String.IsNullOrEmpty(msg))
+                    _writer.WriteLine(msg + " at " + hookStruct.pt.x + ", " + hookStruct.pt.y);
             }
+
             return CallNextHookEx(_hookID, nCode, wParam, lParam);
         }
 
