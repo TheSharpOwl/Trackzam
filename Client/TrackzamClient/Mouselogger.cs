@@ -89,10 +89,10 @@ namespace TrackzamClient
                     case MouseMessages.WM_RBUTTONDOWN: // right mouse click is down
                         typeMsg = "Right Click";
                         break;
-                    case MouseMessages.WM_MOUSEWHEEL: // right mouse click is down
+                    case MouseMessages.WM_MOUSEWHEEL: // mouse wheel is being used
                         typeMsg = "Wheel";
                         break;
-                    case MouseMessages.WM_MOUSEMOVE: // right mouse click is down
+                    case MouseMessages.WM_MOUSEMOVE: // mouse is moving
                         typeMsg = "Moving";
                         break;
                 }
