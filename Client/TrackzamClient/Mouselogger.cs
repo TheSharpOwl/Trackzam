@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls.Primitives;
 
 namespace TrackzamClient
 {
@@ -38,7 +39,7 @@ namespace TrackzamClient
         {
             if (Directory.Exists(path))
             {
-                _logDir = path + "\\Mouselog.txt";
+                _logDir = path + "\\mouse.txt";
                 return true;
             }
 
@@ -80,7 +81,6 @@ namespace TrackzamClient
             {
                 MSLLHOOKSTRUCT hookStruct = (MSLLHOOKSTRUCT)Marshal.PtrToStructure(lParam, typeof(MSLLHOOKSTRUCT));
                 string typeMsg = "";
-                string timeMsg = TrackzamTimer.GetNowClockString();
 
                 switch ((MouseMessages)wParam)
                 {
@@ -113,7 +113,7 @@ namespace TrackzamClient
 
                 }
                 if(!String.IsNullOrEmpty(typeMsg))
-                    _writer.WriteLine("{0} {1},{2} {3}", typeMsg, hookStruct.pt.x, hookStruct.pt.y, timeMsg);
+                    _writer.WriteLine("{0} {1},{2} {3}",TrackzamTimer.GetTimestampString(),typeMsg, hookStruct.pt.x, hookStruct.pt.y);
             }
 
             return CallNextHookEx(_hookID, nCode, wParam, lParam);

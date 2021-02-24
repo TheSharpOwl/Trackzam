@@ -19,7 +19,7 @@ namespace TrackzamClient
             _waveIn.WaveFormat = new WaveFormat(8000, 1);
             
             _writer = new WaveFileWriter(_outputFilename+"\\microphone.wav", _waveIn.WaveFormat);
-            _audioVolumeWriter = new StreamWriter(_outputFilename + "\\AudioVolumeLog.txt");
+            _audioVolumeWriter = new StreamWriter(_outputFilename + "\\audioVolume.txt");
             _waveIn.StartRecording();
         }
         
@@ -43,23 +43,21 @@ namespace TrackzamClient
 
             volume = (float)Math.Round(volume, 3);
 
-            _audioVolumeWriter.WriteLine("{0} {1}",  TrackzamTimer.GetNowString(), volume);
+            _audioVolumeWriter.WriteLine("{0} {1}",  TrackzamTimer.GetTimestampString(), volume);
         }
         
         public void StopRecording()
         {
             _waveIn.StopRecording();
-            
+            _audioVolumeWriter.Close();
         }
         
         private void waveIn_RecordingStopped(object sender, EventArgs e)
         {
-            
             _waveIn.Dispose();
             _waveIn = null;
             _writer.Close();
             _writer = null;
-            _audioVolumeWriter.Close();
         }
         
         private WaveIn _waveIn;

