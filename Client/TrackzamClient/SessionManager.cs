@@ -31,15 +31,21 @@ namespace TrackzamClient
 
         public void EndSession()
         {
-            if (IsSessionInProgress)
-            {
-                IsSessionInProgress = false;
-                _audioRecorder.StopRecording();
-                _keylogger.Stop();
-                _mouselogger.Stop();
-                _windowLogger.StopLogging();
-                System.Diagnostics.Process.Start("explorer.exe", _sessionFolderPath);   
-            }
+            if (!IsSessionInProgress) return;
+            
+            IsSessionInProgress = false;
+            
+            _audioRecorder.StopRecording();
+            _keylogger.Stop();
+            _mouselogger.Stop();
+            _windowLogger.StopLogging();
+            
+            //System.Diagnostics.Process.Start("explorer.exe", _sessionFolderPath);
+            
+            DataSender.SendAudioLogs(_sessionFolderPath+"/audioVolume.txt");
+            DataSender.SendKeyboardLogs(_sessionFolderPath+"/keyboard.txt");
+            DataSender.SendMouseLogs(_sessionFolderPath+"/mouse.txt");
+            DataSender.SendWindowLogs(_sessionFolderPath+"/activeWindow.txt");
         }
         
         private string _sessionFolderPath;

@@ -23,5 +23,11 @@ namespace TrackzamClient
             // the name of the file should be in this format
             return timeNow.ToString("HH-mm-ss-") + ms.ToString();
         }
+        
+        public static string GetTimestampString()
+        {
+            DateTime timeNow = DateTime.Now;
+            return timeNow.Day+"/"+timeNow.Month+"/"+timeNow.Year+timeNow.ToString(" hh:mm:ss");
+        }
     }
 }

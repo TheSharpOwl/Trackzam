@@ -33,7 +33,7 @@ namespace TrackzamClient
                 outputStringBuilder.Append("\r\n");
             }
 
-            String filepath = directory + "\\ActiveWindowLog.txt";
+            String filepath = directory + "\\activeWindow.txt";
 
             if(!Directory.Exists(directory)){
                 Directory.CreateDirectory(directory);
@@ -88,8 +88,7 @@ namespace TrackzamClient
         {
             if (IsLogging)
             {
-                String newLogString =
-                    DateTime.UtcNow.ToString("dd'/'MM'/'yyyy HH:mm:ss") + " " + GetActiveWindowTitle();
+                String newLogString = TrackzamTimer.GetTimestampString() + " " + GetActiveWindowTitle();
                 AddLogItem(newLogString);
 
             }
