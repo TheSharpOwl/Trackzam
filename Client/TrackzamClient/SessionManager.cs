@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using System.Threading;
 
 namespace TrackzamClient
 {
@@ -40,11 +41,14 @@ namespace TrackzamClient
             _mouselogger.Stop();
             _windowLogger.StopLogging();
             
-            //System.Diagnostics.Process.Start("explorer.exe", _sessionFolderPath);
+            System.Diagnostics.Process.Start("explorer.exe", _sessionFolderPath);
             
             DataSender.SendAudioLogs(_sessionFolderPath+"/audioVolume.txt");
+            Thread.Sleep(1500);
             DataSender.SendKeyboardLogs(_sessionFolderPath+"/keyboard.txt");
+            Thread.Sleep(1500);
             DataSender.SendMouseLogs(_sessionFolderPath+"/mouse.txt");
+            Thread.Sleep(1500);
             DataSender.SendWindowLogs(_sessionFolderPath+"/activeWindow.txt");
         }
         

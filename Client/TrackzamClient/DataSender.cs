@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading;
 using System.Threading.Tasks;
 using Flurl.Http;
 using Flurl.Util;
@@ -50,7 +51,7 @@ namespace TrackzamClient
             postDataWriter.Flush();
             
             requestToServerEndpoint.ContentLength = postDataStream.Length;
- 
+
             using (Stream s = requestToServerEndpoint.GetRequestStream())
             {
                 postDataStream.WriteTo(s);
@@ -58,6 +59,8 @@ namespace TrackzamClient
 
             await Task.Delay(1000);
             postDataStream.Close();
+            
+            Console.WriteLine(requestToServerEndpoint.GetResponse());
         }
 
         public static void SendAudioLogs(string path)
