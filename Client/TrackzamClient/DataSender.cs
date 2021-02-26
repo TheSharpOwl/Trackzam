@@ -12,55 +12,60 @@ namespace TrackzamClient
 {
     public class DataSender
     {
-        public static async void SendFileAsync(string type, string path)
+        private static async void SendFileAsync(string type, string path)
         {
-            HttpWebRequest requestToServerEndpoint =
+            await Task.Run(() =>
+            {
+                HttpWebRequest requestToServerEndpoint =
                 (HttpWebRequest)WebRequest.Create("http://34.71.243.7:8000/api/" + type);
  
-            string boundaryString = "----SomeRandomText";
-            string fileUrl = path;
-            
-            requestToServerEndpoint.Method = WebRequestMethods.Http.Post;
-            requestToServerEndpoint.ContentType = "multipart/form-data; boundary=" + boundaryString;
-            requestToServerEndpoint.KeepAlive = true;
-            requestToServerEndpoint.Credentials = System.Net.CredentialCache.DefaultCredentials;
+                string boundaryString = "----SomeRandomText";
+                string fileUrl = path;
+                
+                requestToServerEndpoint.Method = WebRequestMethods.Http.Post;
+                requestToServerEndpoint.ContentType = "multipart/form-data; boundary=" + boundaryString;
+                requestToServerEndpoint.KeepAlive = true;
+                requestToServerEndpoint.Credentials = System.Net.CredentialCache.DefaultCredentials;
 
-            MemoryStream postDataStream = new MemoryStream();
-            StreamWriter postDataWriter = new StreamWriter(postDataStream);
-            
-            postDataWriter.Write("\r\n--" + boundaryString + "\r\n");
-            postDataWriter.Write("Content-Disposition: form-data;"
-                                 + "name=\"{0}\";"
-                                 + "filename=\"{1}\""
-                                 + "\r\nContent-Type: {2}\r\n\r\n",
-                "file",
-                Path.GetFileName(fileUrl),
-                Path.GetExtension(fileUrl));
-            postDataWriter.Flush();
-            
-            FileStream fileStream = new FileStream(fileUrl, FileMode.Open, FileAccess.Read);
-            byte[] buffer = new byte[1024];
-            int bytesRead = 0;
-            while ((bytesRead = fileStream.Read(buffer, 0, buffer.Length)) != 0)
-            {
-                postDataStream.Write(buffer, 0, bytesRead);
-            }
-            fileStream.Close();
- 
-            postDataWriter.Write("\r\n--" + boundaryString + "--\r\n");
-            postDataWriter.Flush();
-            
-            requestToServerEndpoint.ContentLength = postDataStream.Length;
+                MemoryStream postDataStream = new MemoryStream();
+                StreamWriter postDataWriter = new StreamWriter(postDataStream);
+                
+                postDataWriter.Write("\r\n--" + boundaryString + "\r\n");
+                postDataWriter.Write("Content-Disposition: form-data;"
+                                     + "name=\"{0}\";"
+                                     + "filename=\"{1}\""
+                                     + "\r\nContent-Type: {2}\r\n\r\n",
+                    "file",
+                    Path.GetFileName(fileUrl),
+                    Path.GetExtension(fileUrl));
+                postDataWriter.Flush();
+                
+                FileStream fileStream = new FileStream(fileUrl, FileMode.Open, FileAccess.Read);
+                byte[] buffer = new byte[1024];
+                int bytesRead = 0;
+                while ((bytesRead = fileStream.Read(buffer, 0, buffer.Length)) != 0)
+                {
+                    postDataStream.Write(buffer, 0, bytesRead);
+                }
+                fileStream.Close();
+     
+                postDataWriter.Write("\r\n--" + boundaryString + "--\r\n");
+                postDataWriter.Flush();
+                
+                requestToServerEndpoint.ContentLength = postDataStream.Length;
 
-            using (Stream s = requestToServerEndpoint.GetRequestStream())
-            {
-                postDataStream.WriteTo(s);
-            }
+                using (Stream s = requestToServerEndpoint.GetRequestStream())
+                {
+                    postDataStream.WriteTo(s);
+                }
 
-            await Task.Delay(1000);
-            postDataStream.Close();
-            
-            Console.WriteLine(requestToServerEndpoint.GetResponse());
+                while (!requestToServerEndpoint.HaveResponse)
+                {
+                    Thread.Sleep(1000);
+                }
+                Console.WriteLine(requestToServerEndpoint.GetResponse().Headers);
+                postDataStream.Close();
+            });
         }
 
         public static void SendAudioLogs(string path)
