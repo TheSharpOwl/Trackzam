@@ -43,13 +43,13 @@ namespace TrackzamClient
             
             System.Diagnostics.Process.Start("explorer.exe", _sessionFolderPath);
             
+            DataSender.SetIPAdress("34.71.243.7");
             DataSender.SendAudioLogs(_sessionFolderPath+"/audioVolume.txt");
-            Thread.Sleep(1500);
             DataSender.SendKeyboardLogs(_sessionFolderPath+"/keyboard.txt");
-            Thread.Sleep(1500);
             DataSender.SendMouseLogs(_sessionFolderPath+"/mouse.txt");
-            Thread.Sleep(1500);
             DataSender.SendWindowLogs(_sessionFolderPath+"/activeWindow.txt");
+            
+            Console.WriteLine("Sent");
         }
         
         private string _sessionFolderPath;
