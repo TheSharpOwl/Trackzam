@@ -7,14 +7,14 @@ namespace TrackzamClient
     public class SessionManager
     {
         public bool IsSessionInProgress;
-        public SessionManager(MainWindow mainWindow)
+        public SessionManager()
         {
-            _mainWindow = mainWindow;
             IsSessionInProgress = false;
             _windowLogger = new ActiveWindowLoggerClass();
             _audioRecorder = new AudioRecorder();
             _keylogger = new Keylogger();
-            _mouselogger = new Mouselogger();
+            _mouseLogger = new Mouselogger();
+            _videoRecorder = new VideoRecorder();
         }
         
         public void StartNewSession()
@@ -25,8 +25,9 @@ namespace TrackzamClient
             
             _audioRecorder.StartRecord(_sessionFolderPath);
             _keylogger.Start(_sessionFolderPath);
-            _mouselogger.Start(_sessionFolderPath);
+            _mouseLogger.Start(_sessionFolderPath);
             _windowLogger.StartLogging(_sessionFolderPath);
+            _videoRecorder.StartRecording(_sessionFolderPath);
             IsSessionInProgress = true;
         }
 
@@ -38,8 +39,9 @@ namespace TrackzamClient
             
             _audioRecorder.StopRecording();
             _keylogger.Stop();
-            _mouselogger.Stop();
+            _mouseLogger.Stop();
             _windowLogger.StopLogging();
+            _videoRecorder.StopRecording();
             
             System.Diagnostics.Process.Start("explorer.exe", _sessionFolderPath);
             
@@ -53,10 +55,10 @@ namespace TrackzamClient
         }
         
         private string _sessionFolderPath;
-        private ActiveWindowLoggerClass _windowLogger;
-        private Keylogger _keylogger;
-        private Mouselogger _mouselogger;
-        private AudioRecorder _audioRecorder;
-        private MainWindow _mainWindow;
+        private readonly ActiveWindowLoggerClass _windowLogger;
+        private readonly Keylogger _keylogger;
+        private readonly Mouselogger _mouseLogger;
+        private readonly AudioRecorder _audioRecorder;
+        private readonly VideoRecorder _videoRecorder;
     }
 }
