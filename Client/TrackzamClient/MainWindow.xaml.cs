@@ -15,8 +15,7 @@ namespace TrackzamClient
         {
             InitializeComponent();
             InitializeUI();
-            _sessionManager = new SessionManager(this);
-            VideoRecorder videoRecorder = new VideoRecorder();
+            _sessionManager = new SessionManager();
         }
 
         private void InitializeUI()

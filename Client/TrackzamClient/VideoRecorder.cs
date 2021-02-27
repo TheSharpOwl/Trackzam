@@ -26,6 +26,24 @@ namespace TrackzamClient
             InitializeVideoCaptureDevice();
             _videoCaptureDevice.Start();
         }
+        
+        public void StopRecording()
+        {
+            _videoCaptureDevice.SignalToStop();
+            
+            FFmpegLoader.FFmpegPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName + "\\FFMPEG";
+            var settings = new VideoEncoderSettings(width: _width, height: _height, framerate: 20, codec: VideoCodec.H264);
+            settings.EncoderPreset = EncoderPreset.Fast;
+            settings.CRF = 17;
+            
+            using(var file = MediaBuilder.CreateContainer(_filePath+"\\videoCapture.mp4").WithVideo(settings).Create())
+            {
+                foreach (var bitmap in _frames)
+                {
+                    file.Video.AddFrame(ToImageData(Convert(bitmap)));
+                }
+            }
+        }
 
         private void InitializeVideoCaptureDevice()
         {
@@ -50,25 +68,7 @@ namespace TrackzamClient
         {
             _frames.Add(ChangePixelFormat(eventArgs.Frame, PixelFormat.Format32bppArgb));
         }
-
-        private void StopRecording()
-        {
-            _videoCaptureDevice.SignalToStop();
-            
-            FFmpegLoader.FFmpegPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName + "\\FFMPEG";
-            var settings = new VideoEncoderSettings(width: _width, height: _height, framerate: 20, codec: VideoCodec.H264);
-            settings.EncoderPreset = EncoderPreset.Fast;
-            settings.CRF = 17;
-            
-            using(var file = MediaBuilder.CreateContainer(_filePath+"\\videoCapture.mp4").WithVideo(settings).Create())
-            {
-                foreach (var bitmap in _frames)
-                {
-                    file.Video.AddFrame(ToImageData(Convert(bitmap)));
-                }
-            }
-        }
-
+        
         private BitmapSource Convert(System.Drawing.Bitmap bitmap)
         {
             var bitmapData = bitmap.LockBits(
