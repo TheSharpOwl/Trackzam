@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Drawing;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -14,6 +16,7 @@ namespace TrackzamClient
             InitializeComponent();
             InitializeUI();
             _sessionManager = new SessionManager(this);
+            VideoRecorder videoRecorder = new VideoRecorder();
         }
 
         private void InitializeUI()
