@@ -7,8 +7,8 @@ services:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-  web:
-    build: .
+  web_server:
+    build: Server/
     command: bash -c "
       python Server/manage.py makemigrations &&
       python Server/manage.py migrate &&
@@ -17,5 +17,18 @@ services:
       - .:/code
     ports:
       - "8000:8000"
+    depends_on:
+      - db
+
+  video_server:
+    build: VideoServer/
+    command: bash -c "
+      python Server/manage.py makemigrations &&
+      python Server/manage.py migrate &&
+      python Server/manage.py runserver 0.0.0.0:8080"
+    volumes:
+      - .:/code
+    ports:
+      - "8080:8080"
     depends_on:
       - db
