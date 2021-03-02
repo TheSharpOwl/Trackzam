@@ -23,9 +23,9 @@ services:
   video_server:
     build: VideoServer/
     command: bash -c "
-      python Server/manage.py makemigrations &&
-      python Server/manage.py migrate &&
-      python Server/manage.py runserver 0.0.0.0:8080"
+      python VideoServer/manage.py makemigrations &&
+      python VideoServer/manage.py migrate &&
+      python VideoServer/manage.py runserver 0.0.0.0:8080"
     volumes:
       - .:/code
     ports:

@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from API import views
+from . import views
 
 urlpatterns = [
     url(r'^api/send_audio_logs$', views.send_audio_logs),
