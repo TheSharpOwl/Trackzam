@@ -1,6 +1,7 @@
 import face_recognition
 from PIL import Image
 import cv2
+import os
 
 def recognize():
     image = face_recognition.load_image_file("test.png")
@@ -31,25 +32,41 @@ def get_state(name):
     
     return state
 
-def split_video(name):
-    vidcap = cv2.VideoCapture(name)
+def split_video(path, name):
+    print(name)
+    vidcap = cv2.VideoCapture(path+name)
     success,image = vidcap.read()
     count = 0
-    while success:
-        cv2.imwrite("./frames/frame%d.jpg" % count, image)     # save frame as JPEG file      
-        success,image = vidcap.read()
-        print('Read a new frame: ', success)
-        count += 1
+    dir = "VideoServer/VideoAnalyser/"+name.split('.')[0]
+
+    try:
+        access_rights = 0o755
+        os.mkdir(dir, access_rights)
+    except OSError:
+        print ("Creation of the directory %s failed" % dir)
+    else:
+        print ("Successfully created the directory %s" % dir)
+
+        while success:
+            save_dir = dir+"/frame%d.jpg" % count
+            #save_dir = "VideoServer/VideoAnalyser/"+"frame%d.jpg" % count
+
+            print(save_dir)
+            cv2.imwrite(save_dir, image)     # save frame as JPEG file
+            success,image = vidcap.read()
+            print('Read a new frame: ', success)
+            count += 1
     return count
 
 def gen_states(name, amount):
-    f = open(name, "w")
+    f = open("VideoServer/LogFiles/"+name, "w")
     for i in range(amount):
-        line = str(i) + ' ' + str(get_state('./frames/frame%d.jpg' % i)) + '\n'
+        line = str(i) + ' ' + str(get_state("VideoServer/VideoAnalyser/"+name.split('.')[0]+"/frame%d.jpg" % i)) + '\n'
         f.write(line)
-    f.close
+    f.close()
 
 
-amount = split_video('test.mp4')
-gen_states("test.txt", amount)
+
+#amount = split_video('test.mp4')
+#gen_states("test.txt", amount)
 
