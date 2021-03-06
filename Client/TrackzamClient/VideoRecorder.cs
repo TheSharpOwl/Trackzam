@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using AForge.Video;
 using AForge.Video.DirectShow;
 using FFMediaToolkit;
@@ -14,9 +16,12 @@ namespace TrackzamClient
 {
     public class VideoRecorder
     {
-        public VideoRecorder()
+        public VideoRecorder(int frameRate)
         {
             _frames = new List<Bitmap>();
+            dispatcherTimer = new DispatcherTimer();
+            dispatcherTimer.Tick += OnTimerTick;
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, (int)(1.0/frameRate*1000.0));
         }
 
         public void StartRecording(string path)
@@ -24,15 +29,17 @@ namespace TrackzamClient
             _filePath = path;
             _frames.Clear();
             InitializeVideoCaptureDevice();
+            _canAddFrame = true;
             _videoCaptureDevice.Start();
+            dispatcherTimer.Start();
         }
         
         public void StopRecording()
         {
             _videoCaptureDevice.SignalToStop();
-            
+            dispatcherTimer.Stop();
             FFmpegLoader.FFmpegPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName + "\\FFMPEG";
-            var settings = new VideoEncoderSettings(width: _width, height: _height, framerate: 20, codec: VideoCodec.H264);
+            var settings = new VideoEncoderSettings(width: _width, height: _height, framerate: 1, codec: VideoCodec.H264);
             settings.EncoderPreset = EncoderPreset.Fast;
             settings.CRF = 17;
             
@@ -57,7 +64,6 @@ namespace TrackzamClient
             
             VideoCapabilities capabilities = _videoCaptureDevice.VideoCapabilities[0];
             _videoCaptureDevice.VideoResolution = capabilities;
-            
             _width = capabilities.FrameSize.Width;
             _height = capabilities.FrameSize.Height;
             
@@ -66,7 +72,16 @@ namespace TrackzamClient
 
         private void OnFrameReceived(object sender, NewFrameEventArgs eventArgs)
         {
-            _frames.Add(ChangePixelFormat(eventArgs.Frame, PixelFormat.Format32bppArgb));
+            if (_canAddFrame)
+            {
+                _frames.Add(ChangePixelFormat(eventArgs.Frame, PixelFormat.Format32bppArgb));
+                _canAddFrame = false;
+            }
+        }
+        
+        private void OnTimerTick(object? sender, EventArgs e)
+        {
+            _canAddFrame = true;
         }
         
         private BitmapSource Convert(System.Drawing.Bitmap bitmap)
@@ -102,7 +117,10 @@ namespace TrackzamClient
         private int _width;
         private int _height;
         private VideoCaptureDevice _videoCaptureDevice;
+        private DispatcherTimer dispatcherTimer;
         private readonly List<Bitmap> _frames;
         private string _filePath;
+        private bool _canAddFrame;
+        private int _frameRate;
     }
 }
