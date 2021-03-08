@@ -50,17 +50,43 @@ namespace TrackzamClient
             //getting config data
             string IPAdress = "34.71.243.7";
             string PathToConfig = Path.Combine(Environment.CurrentDirectory, "Config.json");
+
+
             try
             {
-                using (StreamReader r = new StreamReader(PathToConfig))
+                // if file doesn't exist then create default
+                if (!File.Exists(PathToConfig))
                 {
-                    string json = r.ReadToEnd();
-                    using JsonDocument config = JsonDocument.Parse(json);
-                    var root = config.RootElement;
-                    IPAdress = root.GetProperty("ServerIP").ToString();
+                    string defaultContent = "{" + Environment.NewLine +
+                        "ServerIP: \"34.71.243.7\"" + Environment.NewLine +
+                        "}";
+                    File.WriteAllText(PathToConfig, defaultContent);
+                }
+                else
+                {
+                    // load config
+                    using (StreamReader r = new StreamReader(PathToConfig))
+                    {
+                        string json = r.ReadToEnd();
+                        using JsonDocument config = JsonDocument.Parse(json);
+                        var root = config.RootElement;
+                        IPAdress = root.GetProperty("ServerIP").ToString();
+                    }
                 }
             }
-            catch(Exception e){}
+            catch (JsonException e)
+            {
+                //TODO "Json format exception"
+            }
+            catch (FileLoadException e)
+            {
+                //TODO "Can't read file"
+            }
+            catch (Exception e)
+            {
+                //TODO "Exception"
+            }
+
             DataSender.SetIPAdress(IPAdress);
             DataSender.SendAudioLogs(_sessionFolderPath+"/audioVolume.txt");
             DataSender.SendKeyboardLogs(_sessionFolderPath+"/keyboard.txt");
