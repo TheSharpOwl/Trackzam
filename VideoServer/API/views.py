@@ -29,6 +29,7 @@ def send_video_file(request):
     newFile = VideoFile.create(file)
     newFile.save(using='default')
 
+
     filename = newFile.file.name.split('/')[-1]
     amount = split_video(user.username, filename)
     loc_of_log_file = gen_states(user.username, filename.split(".")[0]+".txt", amount)

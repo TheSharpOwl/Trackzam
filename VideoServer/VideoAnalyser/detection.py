@@ -2,6 +2,7 @@ import face_recognition
 from PIL import Image
 import cv2
 import os
+import datetime
 
 def recognize():
     image = face_recognition.load_image_file("")
@@ -64,20 +65,27 @@ def split_video(username, filename):
             count += 1
     return count
 
-def gen_states(username, filename, amount):
+def gen_states(username, filename, amount, stamp):
     dir_of_user = "VideoServer/LogFiles/"+ username
     loc_of_log_file = "VideoServer/LogFiles/"+username+"/"+filename
     access_rights = 0o777
     if not os.path.isdir(dir_of_user):
         os.mkdir(dir_of_user, access_rights)
     f = open(loc_of_log_file, "w")
-
     frames_dir = "VideoServer/VideoAnalyser/"+username+"/"+filename.split('.')[0]
+    delta = datetime.timedelta(seconds=1)
+    timestamp = datetime.datetime(2000,5,4,0,0,0)
     for i in range(amount):
+        timestamp = timestamp + delta
         current_frame_dir = frames_dir+"/frame%d.jpg" % i
-        line = str(i) + ' ' + str(get_state(current_frame_dir)) + '\n'
+        if get_state(current_frame_dir) == 0:
+            line = timestamp.strftime("%m/%d/%Y %H:%M:%S") + ' Not present' + '\n'
+        else
+            line = timestamp.strftime("%m/%d/%Y %H:%M:%S") + ' Present' + '\n'
         f.write(line)
     f.close()
 
+
     return loc_of_log_file
+
 
