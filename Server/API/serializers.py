@@ -7,7 +7,7 @@ from API.models import WindowRecord
 class AudioRecordSerializer(serializers.ModelSerializer):
     class Meta:
         model = AudioRecord
-        fields = ('user_id',
+        fields = ('username',
                   'date',
                   'time',
                   'state')
@@ -17,7 +17,7 @@ class AudioRecordSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         try:
-            instance.user_id = validated_data.get('user_id', instance.user_id)
+            instance.username = validated_data.get('username', instance.username)
             instance.date = validated_data.get('date', instance.date)
             instance.time = validated_data.get('time', instance.time)
             instance.state = validated_data.get('state', instance.state)
@@ -31,7 +31,7 @@ class AudioRecordSerializer(serializers.ModelSerializer):
 class KeyboardRecordSerializer(serializers.ModelSerializer):
     class Meta:
         model = KeyboardRecord
-        fields = ('user_id',
+        fields = ('username',
                   'date',
                   'time',
                   'state')
@@ -41,7 +41,7 @@ class KeyboardRecordSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         try:
-            instance.user_id = validated_data.get('user_id', instance.user_id)
+            instance.username = validated_data.get('username', instance.username)
             instance.date = validated_data.get('date', instance.date)
             instance.time = validated_data.get('time', instance.time)
             instance.state = validated_data.get('state', instance.state)
@@ -55,7 +55,7 @@ class KeyboardRecordSerializer(serializers.ModelSerializer):
 class MouseRecordSerializer(serializers.ModelSerializer):
     class Meta:
         model = MouseRecord
-        fields = ('user_id',
+        fields = ('username',
                   'date',
                   'time',
                   'state')
@@ -65,7 +65,7 @@ class MouseRecordSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         try:
-            instance.user_id = validated_data.get('user_id', instance.user_id)
+            instance.username = validated_data.get('username', instance.username)
             instance.date = validated_data.get('date', instance.date)
             instance.time = validated_data.get('time', instance.time)
             instance.state = validated_data.get('state', instance.state)
@@ -79,7 +79,7 @@ class MouseRecordSerializer(serializers.ModelSerializer):
 class WindowRecordSerializer(serializers.ModelSerializer):
     class Meta:
         model = WindowRecord
-        fields = ('user_id',
+        fields = ('username',
                   'date',
                   'time',
                   'state')
@@ -89,7 +89,7 @@ class WindowRecordSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         try:
-            instance.user_id = validated_data.get('user_id', instance.user_id)
+            instance.username = validated_data.get('username', instance.username)
             instance.date = validated_data.get('date', instance.date)
             instance.time = validated_data.get('time', instance.time)
             instance.state = validated_data.get('state', instance.state)
