@@ -32,25 +32,31 @@ def get_state(name):
     
     return state
 
-def split_video(path, name):
-    print(name)
-    vidcap = cv2.VideoCapture(path+name)
+def split_video(username, filename):
+    video_path = "VideoServer/VideoFiles/"
+    print(filename)
+    vidcap = cv2.VideoCapture(video_path+filename)
     success,image = vidcap.read()
     count = 0
-    dir = "VideoServer/VideoAnalyser/"+name.split('.')[0]
+
+    # "VideoServer/VideoAnalyser/john/"
+    dir_of_user = "VideoServer/VideoAnalyser/"+username+"/"
+
+    # "VideoServer/VideoAnalyser/john/4baa3c7fc0564c4d980bbb0a956ffe2a"
+    dir_of_frames = "VideoServer/VideoAnalyser/"+username+"/"+filename.split('.')[0]
 
     try:
         access_rights = 0o755
-        os.mkdir(dir, access_rights)
+        if not os.path.isdir(dir_of_user):
+            os.mkdir(dir_of_user, access_rights)
+        os.mkdir(dir_of_frames, access_rights)
     except OSError:
-        print ("Creation of the directory %s failed" % dir)
+        print ("Creation of the directory %s failed" % dir_of_frames)
     else:
-        print ("Successfully created the directory %s" % dir)
+        print ("Successfully created the directory %s" % dir_of_frames)
 
         while success:
-            save_dir = dir+"/frame%d.jpg" % count
-            #save_dir = "VideoServer/VideoAnalyser/"+"frame%d.jpg" % count
-
+            save_dir = dir_of_frames+"/frame%d.jpg" % count
             print(save_dir)
             cv2.imwrite(save_dir, image)     # save frame as JPEG file
             success,image = vidcap.read()
@@ -58,15 +64,18 @@ def split_video(path, name):
             count += 1
     return count
 
-def gen_states(name, amount):
-    f = open("VideoServer/LogFiles/"+name, "w")
+def gen_states(username, filename, amount):
+    dir_of_user = "VideoServer/LogFiles/"+ username
+    loc_of_log_file = "VideoServer/LogFiles/"+username+"/"+filename
+    access_rights = 0o777
+    if not os.path.isdir(dir_of_user):
+        os.mkdir(dir_of_user, access_rights)
+    f = open(loc_of_log_file, "w")
+
+    frames_dir = "VideoServer/VideoAnalyser/"+username+"/"+filename.split('.')[0]
     for i in range(amount):
-        line = str(i) + ' ' + str(get_state("VideoServer/VideoAnalyser/"+name.split('.')[0]+"/frame%d.jpg" % i)) + '\n'
+        current_frame_dir = frames_dir+"/frame%d.jpg" % i
+        line = str(i) + ' ' + str(get_state(current_frame_dir)) + '\n'
         f.write(line)
     f.close()
-
-
-
-#amount = split_video('test.mp4')
-#gen_states("test.txt", amount)
 
