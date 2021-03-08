@@ -1,6 +1,8 @@
 using System;
 using System.Text;
+using System.Text.Json;
 using System.Threading;
+using System.IO;
 
 namespace TrackzamClient
 {
@@ -44,8 +46,22 @@ namespace TrackzamClient
             _videoRecorder.StopRecording();
             
             System.Diagnostics.Process.Start("explorer.exe", _sessionFolderPath);
-            
-            DataSender.SetIPAdress("34.71.243.7");
+
+            //getting config data
+            string IPAdress = "34.71.243.7";
+            string PathToConfig = Path.Combine(Environment.CurrentDirectory, "Config.json");
+            try
+            {
+                using (StreamReader r = new StreamReader(PathToConfig))
+                {
+                    string json = r.ReadToEnd();
+                    using JsonDocument config = JsonDocument.Parse(json);
+                    var root = config.RootElement;
+                    IPAdress = root.GetProperty("ServerIP").ToString();
+                }
+            }
+            catch(Exception e){}
+            DataSender.SetIPAdress(IPAdress);
             DataSender.SendAudioLogs(_sessionFolderPath+"/audioVolume.txt");
             DataSender.SendKeyboardLogs(_sessionFolderPath+"/keyboard.txt");
             DataSender.SendMouseLogs(_sessionFolderPath+"/mouse.txt");
