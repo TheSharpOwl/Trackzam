@@ -16,7 +16,7 @@ namespace TrackzamClient
 {
     public class VideoRecorder
     {
-        public VideoRecorder(int frameRate)
+        public VideoRecorder(int frameRate, float resolutionLoweringDivisor)
         {
             _frames = new List<Bitmap>();
             dispatcherTimer = new DispatcherTimer();
@@ -64,8 +64,8 @@ namespace TrackzamClient
             
             VideoCapabilities capabilities = _videoCaptureDevice.VideoCapabilities[0];
             _videoCaptureDevice.VideoResolution = capabilities;
-            _width = capabilities.FrameSize.Width;
-            _height = capabilities.FrameSize.Height;
+            _width = (int)(capabilities.FrameSize.Width/_resolutionDivisor);
+            _height = (int)(capabilities.FrameSize.Height/_resolutionDivisor);
             
             _videoCaptureDevice.NewFrame += OnFrameReceived;
         }
@@ -74,7 +74,8 @@ namespace TrackzamClient
         {
             if (_canAddFrame)
             {
-                _frames.Add(ChangePixelFormat(eventArgs.Frame, PixelFormat.Format32bppArgb));
+                
+                _frames.Add(ChangePixelFormat(ResizeImage(eventArgs.Frame, new Size(_width, _height)), PixelFormat.Format32bppArgb));
                 _canAddFrame = false;
             }
         }
@@ -82,6 +83,25 @@ namespace TrackzamClient
         private void OnTimerTick(object? sender, EventArgs e)
         {
             _canAddFrame = true;
+        }
+        
+        public static Bitmap ResizeImage(Bitmap imgToResize, Size size)
+        {
+            try
+            {
+                Bitmap b = new Bitmap(size.Width, size.Height);
+                using (Graphics g = Graphics.FromImage(b))
+                {
+                    g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                    g.DrawImage(imgToResize, 0, 0, size.Width, size.Height);
+                }
+                return b;
+            }
+            catch 
+            { 
+                Console.WriteLine("Bitmap could not be resized");
+                return imgToResize; 
+            }
         }
         
         private BitmapSource Convert(System.Drawing.Bitmap bitmap)
@@ -116,6 +136,7 @@ namespace TrackzamClient
 
         private int _width;
         private int _height;
+        private float _resolutionDivisor;
         private VideoCaptureDevice _videoCaptureDevice;
         private DispatcherTimer dispatcherTimer;
         private readonly List<Bitmap> _frames;

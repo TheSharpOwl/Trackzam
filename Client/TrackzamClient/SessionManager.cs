@@ -14,7 +14,7 @@ namespace TrackzamClient
             _audioRecorder = new AudioRecorder();
             _keylogger = new Keylogger();
             _mouseLogger = new Mouselogger();
-            _videoRecorder = new VideoRecorder(1);
+            _videoRecorder = new VideoRecorder(1,4);
         }
         
         public void StartNewSession()
