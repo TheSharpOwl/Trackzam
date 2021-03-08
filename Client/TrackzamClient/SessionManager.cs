@@ -1,6 +1,8 @@
 using System;
 using System.Text;
+using System.Text.Json;
 using System.Threading;
+using System.IO;
 
 namespace TrackzamClient
 {
@@ -14,7 +16,7 @@ namespace TrackzamClient
             _audioRecorder = new AudioRecorder();
             _keylogger = new Keylogger();
             _mouseLogger = new Mouselogger();
-            _videoRecorder = new VideoRecorder();
+            _videoRecorder = new VideoRecorder(1,4);
         }
         
         public void StartNewSession()
@@ -44,8 +46,48 @@ namespace TrackzamClient
             _videoRecorder.StopRecording();
             
             System.Diagnostics.Process.Start("explorer.exe", _sessionFolderPath);
-            
-            DataSender.SetIPAdress("34.71.243.7");
+
+            //getting config data
+            string IPAdress = "34.71.243.7";
+            string PathToConfig = Path.Combine(Environment.CurrentDirectory, "Config.json");
+
+
+            try
+            {
+                // if file doesn't exist then create default
+                if (!File.Exists(PathToConfig))
+                {
+                    string defaultContent = "{" + Environment.NewLine +
+                        "ServerIP: \"34.71.243.7\"" + Environment.NewLine +
+                        "}";
+                    File.WriteAllText(PathToConfig, defaultContent);
+                }
+                else
+                {
+                    // load config
+                    using (StreamReader r = new StreamReader(PathToConfig))
+                    {
+                        string json = r.ReadToEnd();
+                        using JsonDocument config = JsonDocument.Parse(json);
+                        var root = config.RootElement;
+                        IPAdress = root.GetProperty("ServerIP").ToString();
+                    }
+                }
+            }
+            catch (JsonException e)
+            {
+                //TODO "Json format exception"
+            }
+            catch (FileLoadException e)
+            {
+                //TODO "Can't read file"
+            }
+            catch (Exception e)
+            {
+                //TODO "Exception"
+            }
+
+            DataSender.SetIPAdress(IPAdress);
             DataSender.SendAudioLogs(_sessionFolderPath+"/audioVolume.txt");
             DataSender.SendKeyboardLogs(_sessionFolderPath+"/keyboard.txt");
             DataSender.SendMouseLogs(_sessionFolderPath+"/mouse.txt");
