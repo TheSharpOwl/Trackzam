@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 import requests
 import json
+import datetime
 from requests.auth import HTTPBasicAuth
 
 from django.views.decorators.csrf import csrf_exempt
@@ -29,10 +30,12 @@ def send_video_file(request):
     newFile = VideoFile.create(file)
     newFile.save(using='default')
 
+    stamp = request.POST["start_time"]
+    print(stamp)
 
     filename = newFile.file.name.split('/')[-1]
     amount = split_video(user.username, filename)
-    loc_of_log_file = gen_states(user.username, filename.split(".")[0]+".txt", amount)
+    loc_of_log_file = gen_states(user.username, filename.split(".")[0]+".txt", amount, stamp)
 
     url = 'http://127.0.0.1:8000/api/send_video_logs'
 
