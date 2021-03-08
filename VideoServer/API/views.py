@@ -39,12 +39,14 @@ def send_video_file(request):
     #     f.write('текст для проверки загрузки файла')
 
     with open(loc_of_log_file, 'rb') as f:
-        with open("config.json") as json_data_file:
+        with open("VideoServer/config.json") as json_data_file:
             data = json.load(json_data_file)
         superuser_username = data["superuser_username"]
         superuser_pass = data["superuser_password"]
-        url =  data["Server"] + "/send_video_logs"
-        r = requests.post(url, {'file': f}, auth=HTTPBasicAuth(superuser_username, superuser_pass))
+        url =  data["Server"] + "send_video_logs"
+        print(superuser_username, superuser_pass, url)
+        r = requests.post(url, files = {'file': f})
+        #r = requests.post(url, files = {'file': f}, auth=HTTPBasicAuth(superuser_username, superuser_pass))
         print(r)
 
     return Response({'message': 'File is uploaded'}, status=status.HTTP_201_CREATED)

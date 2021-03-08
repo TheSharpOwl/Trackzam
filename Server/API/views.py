@@ -137,16 +137,16 @@ def show_window(request):
 
 
 @csrf_exempt
-@authentication_classes([BasicAuthentication])
-@permission_classes([IsAuthenticated])
+#@authentication_classes([BasicAuthentication])
+#@permission_classes([IsAuthenticated])
 @api_view(['POST'])
-@user_passes_test(lambda u: u.is_superuser)
+#@user_passes_test(lambda u: u.is_superuser)
 def send_video_logs(request):
     user = request.user
     print("In send", end='\n')
     file = request.FILES['file']
-    list = parse_into_list(file)
-    for record in list:
-        newRecord = VideoRecord.create(user, record['date'], record['time'], record['state'])
-        newRecord.save()
+    #list = parse_into_list(file)
+    #for record in list:
+    #    newRecord = VideoRecord.create(user, record['date'], record['time'], record['state'])
+    #    newRecord.save()
     return Response({'message': 'Video logs uploaded'}, status=status.HTTP_201_CREATED)

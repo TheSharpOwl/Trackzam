@@ -9,3 +9,4 @@ psycopg2-binary>=2.8
 face-recognition
 Pillow >= 2.1.0
 opencv-python
+requests
