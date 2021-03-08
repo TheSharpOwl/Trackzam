@@ -4,7 +4,7 @@ import cv2
 import os
 
 def recognize():
-    image = face_recognition.load_image_file("test.png")
+    image = face_recognition.load_image_file("")
 
     face_locations = face_recognition.face_locations(image)
     k=0
