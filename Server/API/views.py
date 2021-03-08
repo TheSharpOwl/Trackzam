@@ -13,7 +13,7 @@ from django.contrib.auth.decorators import user_passes_test
 
 from API.parser import parse_into_list
 from API.models import AudioRecord, KeyboardRecord
-from API.models import MouseRecord, WindowRecord
+from API.models import MouseRecord, WindowRecord, VideoRecord
 from API.serializers import AudioRecordSerializer
 from API.serializers import KeyboardRecordSerializer
 from API.serializers import MouseRecordSerializer
@@ -134,3 +134,19 @@ def show_window(request):
     records = WindowRecord.objects.using('default').all()
     records_serializer = WindowRecordSerializer(records, many=True)
     return Response(records_serializer.data, status=status.HTTP_200_OK)
+
+
+@csrf_exempt
+@authentication_classes([BasicAuthentication])
+@permission_classes([IsAuthenticated])
+@api_view(['POST'])
+@user_passes_test(lambda u: u.is_superuser)
+def send_video_logs(request):
+    user = request.user
+    print("In send", end='\n')
+    file = request.FILES['file']
+    list = parse_into_list(file)
+    for record in list:
+        newRecord = VideoRecord.create(user, record['date'], record['time'], record['state'])
+        newRecord.save()
+    return Response({'message': 'Video logs uploaded'}, status=status.HTTP_201_CREATED)

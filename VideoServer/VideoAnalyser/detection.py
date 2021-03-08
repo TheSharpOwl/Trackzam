@@ -79,3 +79,5 @@ def gen_states(username, filename, amount):
         f.write(line)
     f.close()
 
+    return loc_of_log_file
+
