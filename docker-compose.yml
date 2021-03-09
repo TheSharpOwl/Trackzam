@@ -15,6 +15,7 @@ services:
       python Server/manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/code
+    hostname: Server
     ports:
       - "8000:8000"
     depends_on:
@@ -28,6 +29,8 @@ services:
       python VideoServer/manage.py runserver 0.0.0.0:8080"
     volumes:
       - .:/code
+    environment:
+      - WAIT_HOSTS=Server:8000
     ports:
       - "8080:8080"
     depends_on:
