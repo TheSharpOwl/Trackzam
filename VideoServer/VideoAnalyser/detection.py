@@ -74,17 +74,19 @@ def gen_states(username, filename, amount, stamp):
     f = open(loc_of_log_file, "w")
     frames_dir = "VideoServer/VideoAnalyser/"+username+"/"+filename.split('.')[0]
     delta = datetime.timedelta(seconds=1)
-    stamp_temp = stamp.split(' ')
+    stamp_temp = stamp.split('%')
+    print(stamp_temp)
     date_temp = stamp_temp[0].split('/')
     time_temp = stamp_temp[1].split(':')
-    timestamp = datetime.datetime(date_temp[2],date_temp[1],date_temp[0],time_temp[0],time_temp[1],time_temp[0])
+    timestamp = datetime.datetime(int(date_temp[2]),int(date_temp[1]),int(date_temp[0]),
+                                  int(time_temp[0]),int(time_temp[1]),int(time_temp[2]))
     for i in range(amount):
         timestamp = timestamp + delta
         current_frame_dir = frames_dir+"/frame%d.jpg" % i
         if get_state(current_frame_dir) == 0:
-            line = timestamp.strftime("%m/%d/%Y %H:%M:%S") + ' Not_present' + '\n'
+            line = timestamp.strftime("%d/%m/%Y %H:%M:%S") + ' Not_present' + '\n'
         else:
-            line = timestamp.strftime("%m/%d/%Y %H:%M:%S") + ' Present' + '\n'
+            line = timestamp.strftime("%d/%m/%Y %H:%M:%S") + ' Present' + '\n'
         f.write(line)
     f.close()
 

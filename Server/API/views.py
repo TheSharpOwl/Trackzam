@@ -18,6 +18,7 @@ from API.serializers import AudioRecordSerializer
 from API.serializers import KeyboardRecordSerializer
 from API.serializers import MouseRecordSerializer
 from API.serializers import WindowRecordSerializer
+from API.serializers import VideoRecordSerializer
 
 
 @api_view(['GET', 'DELETE'])
@@ -145,8 +146,20 @@ def send_video_logs(request):
     user = request.user
     print("In send", end='\n')
     file = request.FILES['file']
-    #list = parse_into_list(file)
-    #for record in list:
-    #    newRecord = VideoRecord.create(user, record['date'], record['time'], record['state'])
-    #    newRecord.save()
+    list = parse_into_list(file)
+    for record in list:
+        newRecord = VideoRecord.create(user, record['date'], record['time'], record['state'])
+        newRecord.save()
     return Response({'message': 'Video logs uploaded'}, status=status.HTTP_201_CREATED)
+
+
+@csrf_exempt
+@authentication_classes([BasicAuthentication])
+@permission_classes([IsAuthenticated])
+@api_view(['GET'])
+@user_passes_test(lambda u: u.is_superuser)
+def show_video(request):
+    user = request.user
+    records = VideoRecord.objects.using('default').all()
+    records_serializer = VideoRecordSerializer(records, many=True)
+    return Response(records_serializer.data, status=status.HTTP_200_OK)

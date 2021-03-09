@@ -49,8 +49,8 @@ def send_video_file(request):
         superuser_pass = data["superuser_password"]
         url =  data["Server"] + "send_video_logs"
         print(superuser_username, superuser_pass, url)
-        r = requests.post(url, files = {'file': f})
-        #r = requests.post(url, files = {'file': f}, auth=HTTPBasicAuth(superuser_username, superuser_pass))
+        #r = requests.post(url, files = {'file': f})
+        r = requests.post(url, files = {'file': f}, auth=HTTPBasicAuth(superuser_username, superuser_pass))
         print(r)
 
     return Response({'message': 'File is uploaded'}, status=status.HTTP_201_CREATED)

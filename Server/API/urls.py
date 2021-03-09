@@ -11,4 +11,5 @@ urlpatterns = [
     url(r'^api/show_keyboard_db$', views.show_keyboard),
     url(r'^api/show_mouse_db$', views.show_mouse),
     url(r'^api/show_window_db$', views.show_window),
+    url(r'^api/show_video_db$', views.show_video),
 ]
