@@ -37,6 +37,16 @@ namespace TrackzamClient
                 UIManager.AlignCenter(_loginButton);
                 UIManager.SetSize(_loginButton, Width/4, Height/20);   
             }
+
+            _curDirTextBlock = UIManager.AddTextBlock();
+            UIManager.SetTextBlockSize(_curDirTextBlock, Width / 2, Height / 20);
+            _curDirTextBlock.TextAlignment = TextAlignment.Center;
+            _curDirTextBlock.TextTrimming = TextTrimming.CharacterEllipsis;
+
+            _changeDirButton = UIManager.AddButton("Change storage directory", ChangeDirectory);
+            UIManager.AlignCenter(_changeDirButton);
+            UIManager.SetSize(_changeDirButton, Width / 4, Height / 20);
+            _storageDirManager = new StorageDirectoryManager(_curDirTextBlock, _changeDirButton);
         }
 
         private void OpenLoginWindow(object sender, RoutedEventArgs routedEventArgs)
@@ -83,11 +93,19 @@ namespace TrackzamClient
             
         }
 
+        private void ChangeDirectory(object sender, RoutedEventArgs routedEventArgs)
+        {
+            StorageDirectoryManager.ChangeFolder();
+        }
+
         private UserLogin _userLogin;
+        private StorageDirectoryManager _storageDirManager;
         
         private StackPanel _stackPanel;
         private Button _sessionControlButton;
         private Button _loginButton;
+        private Button _changeDirButton;
+        private TextBlock _curDirTextBlock;
         private readonly SessionManager _sessionManager;
     }
 }

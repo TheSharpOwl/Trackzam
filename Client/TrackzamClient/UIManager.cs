@@ -65,7 +65,19 @@ namespace TrackzamClient
         {
             button.Content = newText;
         }
-        
+
+        public static void UpdateTextBlockText(TextBlock textBlock, string newText)
+        {
+            textBlock.Text = newText;
+        }
+
+        public static TextBlock AddTextBlock()
+        {
+            TextBlock textBlock = new TextBlock();
+            _stackPanel.Children.Add(textBlock);
+            return textBlock;
+        }
+
         public static TextBox AddTextBox(RoutedEventHandler handler)
         {
             TextBox textBox = new TextBox();
