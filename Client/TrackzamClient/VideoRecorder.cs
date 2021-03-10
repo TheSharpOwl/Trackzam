@@ -19,9 +19,11 @@ namespace TrackzamClient
         public VideoRecorder(int frameRate, float resolutionLoweringDivisor)
         {
             _frames = new List<Bitmap>();
-            dispatcherTimer = new DispatcherTimer();
-            dispatcherTimer.Tick += OnTimerTick;
-            dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, (int)(1.0/frameRate*1000.0));
+            _dispatcherTimer = new DispatcherTimer();
+            _dispatcherTimer.Tick += OnTimerTick;
+            _dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, (int)(1.0/frameRate*1000.0));
+
+            _resolutionDivisor = resolutionLoweringDivisor;
         }
 
         public void StartRecording(string path)
@@ -31,13 +33,13 @@ namespace TrackzamClient
             InitializeVideoCaptureDevice();
             _canAddFrame = true;
             _videoCaptureDevice.Start();
-            dispatcherTimer.Start();
+            _dispatcherTimer.Start();
         }
         
         public void StopRecording()
         {
             _videoCaptureDevice.SignalToStop();
-            dispatcherTimer.Stop();
+            _dispatcherTimer.Stop();
             FFmpegLoader.FFmpegPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName + "\\FFMPEG";
             var settings = new VideoEncoderSettings(width: _width, height: _height, framerate: 1, codec: VideoCodec.H264);
             settings.EncoderPreset = EncoderPreset.Fast;
@@ -138,7 +140,7 @@ namespace TrackzamClient
         private int _height;
         private float _resolutionDivisor;
         private VideoCaptureDevice _videoCaptureDevice;
-        private DispatcherTimer dispatcherTimer;
+        private DispatcherTimer _dispatcherTimer;
         private readonly List<Bitmap> _frames;
         private string _filePath;
         private bool _canAddFrame;
