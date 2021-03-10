@@ -77,6 +77,7 @@ namespace TrackzamClient
         {
             _dispatcherTimer.Stop();
             _waveIn.StopRecording();
+            _audioVolumeWriter.Close();
         }
         
         private void waveIn_RecordingStopped(object sender, EventArgs e)
@@ -85,7 +86,6 @@ namespace TrackzamClient
             _waveIn = null;
             _writer.Close();
             _writer = null;
-            _audioVolumeWriter.Close();
         }
         
         private WaveIn _waveIn;
