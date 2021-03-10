@@ -22,6 +22,8 @@ namespace TrackzamClient
             dispatcherTimer = new DispatcherTimer();
             dispatcherTimer.Tick += OnTimerTick;
             dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, (int)(1.0/frameRate*1000.0));
+
+            _resolutionDivisor = resolutionLoweringDivisor;
         }
 
         public void StartRecording(string path)
