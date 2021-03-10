@@ -11,35 +11,36 @@ namespace TrackzamClient
     sealed class UserLogin
     {
         private const string userRoot = @"HKEY_CURRENT_USER\TrachzamData\";
+        // TODO store = private , store_pass / user -> public
 
         // TODO store the username too
-        public static void StorePass(byte[] hashedPass, string keyName = "UserPass")
+        public static void StoreInfo(string keyName , string info)
         {
-            string fullKeyName = userRoot + "\\" + keyName;
+            string regeditDir = userRoot + "\\" + keyName;
 
-            if (hashedPass == null)
+            if (info == null)
             {
                 // TODO handle the not hashing case
                 Console.WriteLine("Failed to hash");
             }
 
-            Registry.SetValue(fullKeyName, keyName, hashedPass);
+            Registry.SetValue(regeditDir, keyName, info);
         }
 
-        // TODO make it return the hash not a string
-        public static byte[] GetStoredPass(string keyName)
+        public static string GetInfo(string keyName)
         {
-            byte[] failBytes = Encoding.Default.GetBytes("Failed");
-            byte[] hashedPass = (byte[])Registry.GetValue(userRoot + "\\" + keyName, keyName, failBytes);
+            // TODO try failedMessage = null (check docs if it is nullable)
+            string failedMessage = "Failed";
+            string storedPass = (string) Registry.GetValue(userRoot + "\\" + keyName, keyName, failedMessage);
 
-            string message = Encoding.Default.GetString(hashedPass);
-            if (message == "Failed")
+            if (storedPass == failedMessage)
             {
                 // TODO handle failed retrieve
                 Console.WriteLine("Failed to retrieve");
+                return null;
             }
-
-            return hashedPass;
+            
+            return storedPass;
         }
 
         private static byte[] Encrypt(string text)
@@ -57,12 +58,10 @@ namespace TrackzamClient
         {
 
             string pass = "bla_bla";
-            byte[] encPass = UserLogin.Encrypt(pass);
-            UserLogin.StorePass(encPass);
-            byte[] TheStoredStuff = UserLogin.GetStoredPass("UserPass");
-            byte[] anotherEnc = UserLogin.Encrypt(pass);
+            StoreInfo("UserPass", pass);
+            string ans = GetInfo("UserPass");
 
-            return anotherEnc.SequenceEqual(encPass);
+            return pass == ans;
         }
     }
 }
