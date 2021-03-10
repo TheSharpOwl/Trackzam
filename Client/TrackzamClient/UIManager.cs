@@ -35,8 +35,14 @@ namespace TrackzamClient
         {
             MessageBox.Show(message);
         }
-        
-        
+       
+        // Didn't write using System.Windows.Forms since it gived ambigious error with System.Windows for MessageBox
+        public static void ThrowErrorWindow(string message)
+        {
+            System.Windows.Forms.MessageBox.Show(message, "Error",
+            System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+        }
+      
         private static StackPanel _stackPanel;
     }
 }
