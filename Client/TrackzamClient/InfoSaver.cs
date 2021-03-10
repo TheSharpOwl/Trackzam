@@ -8,15 +8,30 @@ using System.Linq;
 
 namespace TrackzamClient
 {
-    sealed class UserLogin
+    sealed class InfoSaver
     {
-        private const string userRoot = @"HKEY_CURRENT_USER\TrachzamData\";
-        // TODO store = private , store_pass / user -> public
-
-        // TODO store the username too
-        public static void StoreInfo(string keyName , string info)
+        private const string userRoot = @"HKEY_CURRENT_USER\SOFTWARE\Trackam\";
+        public static void StoreUserInfo(string userName, string password)
         {
-            string regeditDir = userRoot + "\\" + keyName;
+            StoreInfo("username", userName);
+            StoreInfo("pass", password);
+        }
+        public static bool UserIsStored()
+        {
+            return GetInfo("username") != null && GetInfo("pass") != null;
+        }
+        public static string GetUser()
+        {
+            return GetInfo("username");
+        }
+
+        public static string GetPass()
+        {
+            return GetInfo("pass");
+        }
+        private static void StoreInfo(string keyName , string info)
+        {
+            string regeditDir = userRoot + keyName;
 
             if (info == null)
             {
@@ -27,7 +42,7 @@ namespace TrackzamClient
             Registry.SetValue(regeditDir, keyName, info);
         }
 
-        public static string GetInfo(string keyName)
+        private static string GetInfo(string keyName)
         {
             // TODO try failedMessage = null (check docs if it is nullable)
             string failedMessage = "Failed";
@@ -56,12 +71,14 @@ namespace TrackzamClient
         //THIS Function IS FOR TESTING THE PASSWORD STORING AND COMPARSION
         public static bool Test()
         {
+           //StoreUserInfo("ziad", "12345");
+            if (GetUser() != null)
+                return true;
+            else
+                return false;
 
-            string pass = "bla_bla";
-            StoreInfo("UserPass", pass);
-            string ans = GetInfo("UserPass");
-
-            return pass == ans;
         }
+
+        
     }
 }
