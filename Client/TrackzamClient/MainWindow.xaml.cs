@@ -49,6 +49,7 @@ namespace TrackzamClient
             if (_userLogin.TryLogin(authData.login, authData.pass))
             {
                 UIManager.CloseLoginWindow();
+                _stackPanel.Children.Remove(_loginButton);
             }
             else
             {
