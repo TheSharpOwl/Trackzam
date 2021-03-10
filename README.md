@@ -113,11 +113,12 @@ How to use client application
 
 ### Configuration
 
-To change temporary storage directory, you could use button "Change dir".
-To change IP address of a server to send data, you should go application directory, open "Config.json" file and change ServerIP field to your server IP address. Please, be ensure to follow .json files standard to correctly change server IP.
+ * To change temporary storage directory, you could use button "Change dir".
+ * To change IP address of a server to send data, you should go application directory, open "Config.json" file and change ServerIP field to your server IP address.
+ * Please, be ensure to follow .json files standard to correctly change server IP.
 
 ### Authorization
 TODO
 ### Recording
-To start recording, press the "Start Recording Session" button. It should change it's name to "Stop Recording Session".
-To stop recording, press the "Stop Recording Session" button. After that you will see where all of your recording files where stored.
+ * To start recording, press the "Start Recording Session" button. It should change it's name to "Stop Recording Session".
+ * To stop recording, press the "Stop Recording Session" button. After that you will see where all of your recording files where stored.
