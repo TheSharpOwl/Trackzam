@@ -93,7 +93,7 @@ StyleCopReport.xml
 *.svclog
 *.scc
 
-# Chutzpah Test files
+# Chutzpah VideoAnalyser files
 _Chutzpah*
 
 # Visual C++ cache files

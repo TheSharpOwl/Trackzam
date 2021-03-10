@@ -1,5 +1,96 @@
-0 1
-1 1
-2 1
-3 0
-4 1
+Frame #0 - User is present and looking at the screen
+Frame #1 - User is present and looking at the screen
+Frame #2 - User is present and looking at the screen
+Frame #3 - User is present and looking at the screen
+Frame #4 - User is present and looking at the screen
+Frame #5 - User is present and looking at the screen
+Frame #6 - User is present and looking at the screen
+Frame #7 - User is not looking at the screen
+Frame #8 - User is not looking at the screen
+Frame #9 - User is present and looking at the screen
+Frame #10 - User is present and looking at the screen
+Frame #11 - User is present and looking at the screen
+Frame #12 - User is present and looking at the screen
+Frame #13 - User is present and looking at the screen
+Frame #14 - User is present and looking at the screen
+Frame #15 - User is present and looking at the screen
+Frame #16 - User is present and looking at the screen
+Frame #17 - User is present and looking at the screen
+Frame #18 - User is present and looking at the screen
+Frame #19 - User is present and looking at the screen
+Frame #20 - User is present and looking at the screen
+Frame #21 - User is not looking at the screen
+Frame #22 - User is not looking at the screen
+Frame #23 - User is present and looking at the screen
+Frame #24 - User is present and looking at the screen
+Frame #25 - User is present and looking at the screen
+Frame #26 - User is not looking at the screen
+Frame #27 - User is present and looking at the screen
+Frame #28 - User is present and looking at the screen
+Frame #29 - User is present and looking at the screen
+Frame #30 - User is present and looking at the screen
+Frame #31 - User is present and looking at the screen
+Frame #32 - User is present and looking at the screen
+Frame #33 - User is present and looking at the screen
+Frame #34 - User is present and looking at the screen
+Frame #35 - User is present and looking at the screen
+Frame #36 - User is present and looking at the screen
+Frame #37 - User is present and looking at the screen
+Frame #38 - User is not looking at the screen
+Frame #39 - User is not looking at the screen
+Frame #40 - User is present and looking at the screen
+Frame #41 - User is present and looking at the screen
+Frame #42 - User is present and looking at the screen
+Frame #43 - User is present and looking at the screen
+Frame #44 - User is present and looking at the screen
+Frame #45 - User is present and looking at the screen
+Frame #46 - User is present and looking at the screen
+Frame #47 - User is present and looking at the screen
+Frame #48 - User is present and looking at the screen
+Frame #49 - User is present and looking at the screen
+Frame #50 - User is present and looking at the screen
+Frame #51 - User is present and looking at the screen
+Frame #52 - User is present and looking at the screen
+Frame #53 - User is present and looking at the screen
+Frame #54 - User is present and looking at the screen
+Frame #55 - User is present and looking at the screen
+Frame #56 - User is present and looking at the screen
+Frame #57 - User is present and looking at the screen
+Frame #58 - User is present and looking at the screen
+Frame #59 - User is present and looking at the screen
+Frame #60 - User is present and looking at the screen
+Frame #61 - User is present and looking at the screen
+Frame #62 - User is present and looking at the screen
+Frame #63 - User is present and looking at the screen
+Frame #64 - User is not looking at the screen
+Frame #65 - User is present and looking at the screen
+Frame #66 - User is present and looking at the screen
+Frame #67 - User is present and looking at the screen
+Frame #68 - User is present and looking at the screen
+Frame #69 - User is present and looking at the screen
+Frame #70 - User is present and looking at the screen
+Frame #71 - User is present and looking at the screen
+Frame #72 - User is present and looking at the screen
+Frame #73 - User is present and looking at the screen
+Frame #74 - User is present and looking at the screen
+Frame #75 - User is present and looking at the screen
+Frame #76 - User is present and looking at the screen
+Frame #77 - User is present and looking at the screen
+Frame #78 - User is present and looking at the screen
+Frame #79 - User is present and looking at the screen
+Frame #80 - User is present and looking at the screen
+Frame #81 - User is present and looking at the screen
+Frame #82 - User is present and looking at the screen
+Frame #83 - User is present and looking at the screen
+Frame #84 - User is present and looking at the screen
+Frame #85 - User is present and looking at the screen
+Frame #86 - User is present and looking at the screen
+Frame #87 - User is present and looking at the screen
+Frame #88 - User is present and looking at the screen
+Frame #89 - User is present and looking at the screen
+Frame #90 - User is present and looking at the screen
+Frame #91 - User is present and looking at the screen
+Frame #92 - User is present and looking at the screen
+Frame #93 - User is not looking at the screen
+Frame #94 - User is present and looking at the screen
+Frame #95 - User is present and looking at the screen

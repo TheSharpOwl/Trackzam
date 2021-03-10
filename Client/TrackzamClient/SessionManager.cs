@@ -13,7 +13,7 @@ namespace TrackzamClient
         {
             IsSessionInProgress = false;
             _windowLogger = new ActiveWindowLoggerClass();
-            _audioRecorder = new AudioRecorder();
+            _audioRecorder = new AudioRecorder(8000, 16, 1000);
             _keylogger = new Keylogger();
             _mouseLogger = new Mouselogger();
             _videoRecorder = new VideoRecorder(1,4);
