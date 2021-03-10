@@ -31,6 +31,7 @@ namespace TrackzamClient
             _dispatcherTimer = new DispatcherTimer();
             _dispatcherTimer.Tick += OnTimerTick;
             _dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, _volumeLogUpdatePeriod);
+            _dispatcherTimer.Start();
             
             _waveIn.StartRecording();
         }
@@ -74,6 +75,7 @@ namespace TrackzamClient
         
         public void StopRecording()
         {
+            _dispatcherTimer.Stop();
             _waveIn.StopRecording();
         }
         

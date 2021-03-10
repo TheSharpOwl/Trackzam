@@ -50,7 +50,7 @@ namespace TrackzamClient
 
             if (storedPass == failedMessage)
             {
-                // TODO handle failed retrieve
+                UIManager.ShowMessage("Unknown Error");
                 Console.WriteLine("Failed to retrieve");
                 return null;
             }
