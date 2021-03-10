@@ -66,19 +66,5 @@ namespace TrackzamClient
             byte[] hashed = sha.ComputeHash(stringBytes);
             return hashed;
         }
-
-        //TODO DELETE
-        //THIS Function IS FOR TESTING THE PASSWORD STORING AND COMPARSION
-        public static bool Test()
-        {
-           //StoreUserInfo("ziad", "12345");
-            if (GetUser() != null)
-                return true;
-            else
-                return false;
-
-        }
-
-        
     }
 }
