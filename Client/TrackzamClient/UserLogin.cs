@@ -33,6 +33,7 @@ namespace TrackzamClient
             if (response.Content == "{\"message\":\"Credentials are correct.\"}")
             {
                 InfoSaver.StoreUserInfo(login, password, email);
+                IsLoggedIn = true;
                 return true;
             }
 
