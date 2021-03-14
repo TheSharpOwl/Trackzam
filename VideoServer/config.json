@@ -1,6 +1,5 @@
 {
   "self": "http://127.0.0.1:8080/api/",
-  "Server": "http://Server:8000/api/",
-  "superuser_username": "admin",
-  "superuser_password": "admin"
+  "self_port" : "8080",
+  "Server": "http://Server:8000/api/"
 }

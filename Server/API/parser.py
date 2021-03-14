@@ -21,5 +21,3 @@ def parse_into_list(file):
         node = {'date':date,'time':time,'state':state}
         log.append(node)
     return log
-
-#print(parse_into_list(f))

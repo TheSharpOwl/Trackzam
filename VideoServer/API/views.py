@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 import requests
 import json
+import os
 import datetime
 from requests.auth import HTTPBasicAuth
 
@@ -22,7 +23,8 @@ from VideoAnalyser.detection import split_video, gen_states
 @permission_classes([IsAuthenticated])
 @api_view(['POST'])
 def send_video_file(request):
-    user = request.user
+    keyuser = request.data['keyname']
+    print(keyuser)
     code = request.META['HTTP_AUTHORIZATION']
 
     print("In send", end='\n')
@@ -34,24 +36,21 @@ def send_video_file(request):
     print(stamp)
 
     filename = newFile.file.name.split('/')[-1]
-    amount = split_video(user.username, filename)
-    loc_of_log_file = gen_states(user.username, filename.split(".")[0]+".txt", amount, stamp)
-
-    url = 'http://127.0.0.1:8000/api/send_video_logs'
-
-    # with open('test.txt', 'w') as f:
-    #     f.write('текст для проверки загрузки файла')
+    amount = split_video(keyuser, filename)
+    loc_of_log_file = gen_states(keyuser, filename.split(".")[0]+".txt", amount, stamp)
 
     with open(loc_of_log_file, 'rb') as f:
-        with open("VideoServer/config.json") as json_data_file:
-            data = json.load(json_data_file)
-        superuser_username = data["superuser_username"]
-        superuser_pass = data["superuser_password"]
-        url =  data["Server"] + "send_video_logs"
-        print(superuser_username, superuser_pass, url)
-        #r = requests.post(url, files = {'file': f})
-        r = requests.post(url, files = {'file': f}, auth=HTTPBasicAuth(superuser_username, superuser_pass))
-        print(r)
+
+        DJANGO_SU_NAME = os.environ.get('DJANGO_SU_NAME')
+        DJANGO_SU_PASSWORD = os.environ.get('DJANGO_SU_PASSWORD')
+
+        url = "http://webserver:"+os.environ.get('Server_port')+'/api/send_video_logs'
+        parameters = {'keyname':keyuser}
+        #print(DJANGO_SU_NAME, DJANGO_SU_PASSWORD, url)
+        r = requests.post(url, files = {'file': f}, params=parameters
+                          , auth=HTTPBasicAuth(DJANGO_SU_NAME, DJANGO_SU_PASSWORD),
+                          headers={'enctype': "multipart/form-data"})
+        print(r.request.body)
 
     return Response({'message': 'File is uploaded'}, status=status.HTTP_201_CREATED)
 
@@ -63,7 +62,7 @@ def send_audio_file(request):
     user = request.user
     print("In send", end='\n')
     file = request.FILES['file']
-    newFile = AudioFile.create(user.username, file)
+    newFile = AudioFile.create(file)
     newFile.save(using='default')
     return Response({'message': 'File is uploaded'}, status=status.HTTP_201_CREATED)
 

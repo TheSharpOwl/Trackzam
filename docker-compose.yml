@@ -7,31 +7,55 @@ services:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-  web_server:
+    volumes:
+      - db-data:/var/lib/postgresql/data
+  webserver:
     build: Server/
     command: bash -c "
       python Server/manage.py makemigrations &&
-      python Server/manage.py migrate &&
+      python Server/manage.py migrate --fake-initial &&
+      python Server/manage.py initadmin &&
+      python Server/manage.py inituser &&
       python Server/manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/code
+    environment:
+      - self_port=8000
+      - DJANGO_SU_NAME=adminadmin
+      - DJANGO_SU_EMAIL=admin@admin.ru
+      - DJANGO_SU_PASSWORD=adminpassword
+      - DJANGO_U_NAME=username
+      - DJANGO_U_EMAIL=username@username.ru
+      - DJANGO_U_PASSWORD=usernamepassword
     hostname: Server
     ports:
       - "8000:8000"
     depends_on:
       - db
 
-  video_server:
+  videoserver:
     build: VideoServer/
     command: bash -c "
       python VideoServer/manage.py makemigrations &&
-      python VideoServer/manage.py migrate &&
+      python VideoServer/manage.py migrate --fake-initial&&
+      python VideoServer/manage.py initadmin &&
+      python VideoServer/manage.py inituser &&
       python VideoServer/manage.py runserver 0.0.0.0:8080"
     volumes:
       - .:/code
     environment:
-      - WAIT_HOSTS=Server:8000
+      - self_port=8080
+      - Server_port=8000
+      - DJANGO_SU_NAME=adminadmin
+      - DJANGO_SU_EMAIL=admin@admin.ru
+      - DJANGO_SU_PASSWORD=adminpassword
+      - DJANGO_U_NAME=username
+      - DJANGO_U_EMAIL=username@username.ru
+      - DJANGO_U_PASSWORD=usernamepassword
     ports:
       - "8080:8080"
     depends_on:
       - db
+
+volumes:
+  db-data:
