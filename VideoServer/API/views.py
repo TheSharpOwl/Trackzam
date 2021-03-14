@@ -32,7 +32,7 @@ def send_video_file(request):
     newFile = VideoFile.create(file)
     newFile.save(using='default')
 
-    stamp = request.POST["start_time"]
+    stamp = request.query_params["start_time"]
     print(stamp)
 
     filename = newFile.file.name.split('/')[-1]
