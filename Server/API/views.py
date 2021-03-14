@@ -2,6 +2,7 @@ from rest_framework.decorators import api_view
 from django.http.response import JsonResponse
 from rest_framework.response import Response
 from rest_framework import status
+import datetime
 
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.authentication import BasicAuthentication
@@ -19,6 +20,7 @@ from API.serializers import KeyboardRecordSerializer
 from API.serializers import MouseRecordSerializer
 from API.serializers import WindowRecordSerializer
 from API.serializers import VideoRecordSerializer
+from API.state_processor import generate
 
 # Audio
 @csrf_exempt
@@ -165,4 +167,64 @@ def show_video(request):
 def check_user(request):
     print("In send", end='\n')
     return Response({'message': 'Credentials are correct.'}, status=status.HTTP_200_OK)
+
+
+
+@csrf_exempt
+@authentication_classes([BasicAuthentication])
+@permission_classes([IsAuthenticated])
+@api_view(['GET'])
+@user_passes_test(lambda u: u.is_superuser)
+def get_suspicious(request):
+    print("In send", end='\n')
+    start_day = request.query_params["start_day"]
+    end_day = request.query_params["end_day"]
+    email = request.query_params["email"]
+
+
+    start_date_split = start_day.split("/")
+    start_date = start_date_split[2]+'-'+start_date_split[1]+'-'+start_date_split[0]
+
+    end_date_split = end_day.split("/")
+    end_date = end_date_split[2]+'-'+end_date_split[1]+'-'+end_date_split[0]
+
+
+    records1 = MouseRecord.objects.using('default').filter(username=email).filter(
+        date__range=[start_date,end_date]
+    )
+    data1 = MouseRecordSerializer(records1, many=True).data
+    print(data1)
+
+    records2 = KeyboardRecord.objects.using('default').filter(username=email).filter(
+        date__range=[start_date,end_date]
+    )
+    data2 = KeyboardRecordSerializer(records2, many=True).data
+    print(data2)
+
+    records3 = AudioRecord.objects.using('default').filter(username=email).filter(
+        date__range=[start_date,end_date]
+    )
+    data3 = AudioRecordSerializer(records3, many=True).data
+    print(data3)
+
+    records4 = VideoRecord.objects.using('default').filter(username=email).filter(
+        date__range=[start_date,end_date]
+    )
+    data4 = VideoRecordSerializer(records4, many=True).data
+    print(data4)
+
+    records5 = WindowRecord.objects.using('default').filter(username=email).filter(
+        date__range=[start_date,end_date]
+    )
+    data5 = WindowRecordSerializer(records5, many=True).data
+    print(data5)
+
+    t1 = datetime.datetime(int(start_date_split[2]), int(start_date_split[1]),
+                           int(start_date_split[0]),0,0,0)
+    t2 = datetime.datetime(int(end_date_split[2]), int(end_date_split[1]),
+                           int(end_date_split[0]),23,59,59)
+    log = generate(t1,t2,data1, data2, data3, data4, data5)
+
+
+    return Response({'message': 'Suspicious behaiviour', 'content':log}, status=status.HTTP_200_OK)
 

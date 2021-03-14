@@ -104,7 +104,6 @@ def gen_states_for_video(time1, time2, log:list):
 
 def gen_states_for_window(time1, time2, log_w:list): 
     out = []
-    window = log_w[0]
     for i in log_w:
         date = i['date'].split('-')
         time = i['time'].split(':')
@@ -116,19 +115,19 @@ def gen_states_for_window(time1, time2, log_w:list):
     print('\n')
     return out
 
-f_w = open('C:/Users/Jameel/Desktop/Trackzam/Server/Test/window.txt', 'r')
-f_a = open('C:/Users/Jameel/Desktop/Trackzam/Server/Test/audio.txt', 'r')
-f_v = open('C:/Users/Jameel/Desktop/Trackzam/Server/Test/video.txt', 'r')
-log_w = parse_into_list(f_w)
-log_a = parse_into_list(f_a)
-log_v = parse_into_list(f_v)
-log_m = parse_into_list(f_v)
-log_k = parse_into_list(f_v)
+#f_w = open('C:/Users/Jameel/Desktop/Trackzam/Server/Test/window.txt', 'r')
+#f_a = open('C:/Users/Jameel/Desktop/Trackzam/Server/Test/audio.txt', 'r')
+#f_v = open('C:/Users/Jameel/Desktop/Trackzam/Server/Test/video.txt', 'r')
+#log_w = parse_into_list(f_w)
+#log_a = parse_into_list(f_a)
+#log_v = parse_into_list(f_v)
+#log_m = parse_into_list(f_v)
+#log_k = parse_into_list(f_v)
 
-t1 = datetime.datetime(2020,12,27,12,45,13)
-t2 = datetime.datetime(2020,12,27,12,45,34)
-log1 = generate(t1,t2,log_m, log_k, log_a, log_v, log_w)
-t3 = t2 - t1
+#t1 = datetime.datetime(2020,12,27,12,45,13)
+#t2 = datetime.datetime(2020,12,27,12,45,34)
+#log1 = generate(t1,t2,log_m, log_k, log_a, log_v, log_w)
+#t3 = t2 - t1
 
-for i in log1:
-    print(i)
+#for i in log1:
+#    print(i)

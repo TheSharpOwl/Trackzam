@@ -13,4 +13,6 @@ urlpatterns = [
     url(r'^api/show_window_db$', views.show_window),
     url(r'^api/show_video_db$', views.show_video),
     url(r'^api/check_user$', views.check_user),
+    url(r'^api/get_suspicious$', views.get_suspicious),
+
 ]
