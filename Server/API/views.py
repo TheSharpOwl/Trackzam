@@ -156,3 +156,13 @@ def show_video(request):
     records = VideoRecord.objects.using('default').all()
     records_serializer = VideoRecordSerializer(records, many=True)
     return Response(records_serializer.data, status=status.HTTP_200_OK)
+
+
+@csrf_exempt
+@authentication_classes([BasicAuthentication])
+@permission_classes([IsAuthenticated])
+@api_view(['POST'])
+def check_user(request):
+    print("In send", end='\n')
+    return Response({'message': 'Credentials are correct.'}, status=status.HTTP_200_OK)
+
