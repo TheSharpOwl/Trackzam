@@ -40,7 +40,7 @@ namespace TrackzamClient
         {
             _videoCaptureDevice.SignalToStop();
             _dispatcherTimer.Stop();
-            FFmpegLoader.FFmpegPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName + "\\FFMPEG";
+            FFmpegLoader.FFmpegPath = Directory.GetCurrentDirectory() + "\\FFMPEG";
             var settings = new VideoEncoderSettings(width: _width, height: _height, framerate: 1, codec: VideoCodec.H264);
             settings.EncoderPreset = EncoderPreset.Fast;
             settings.CRF = 17;

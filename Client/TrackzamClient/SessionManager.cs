@@ -28,6 +28,7 @@ namespace TrackzamClient
             _windowLogger.StartLogging(_sessionFolderPath);
             _videoRecorder.StartRecording(_sessionFolderPath);
             IsSessionInProgress = true;
+            _startTime = TrackzamTimer.GetTimestampString();
         }
 
         public void EndSession()
@@ -47,7 +48,7 @@ namespace TrackzamClient
             DataSender.SetIPAdress(ConfigManager.ServerIP);
             DataSender.SendAudioLogs(_sessionFolderPath+"/audioVolume.txt");
             DataSender.SendAudioFile(_sessionFolderPath+"/microphone.wav");
-            DataSender.SendVideoFile(_sessionFolderPath+"/videoCapture.mp4");
+            DataSender.SendVideoFile(_sessionFolderPath+"/videoCapture.mp4", _startTime);
             DataSender.SendKeyboardLogs(_sessionFolderPath+"/keyboard.txt");
             DataSender.SendMouseLogs(_sessionFolderPath+"/mouse.txt");
             DataSender.SendWindowLogs(_sessionFolderPath+"/activeWindow.txt");
@@ -61,5 +62,6 @@ namespace TrackzamClient
         private readonly Mouselogger _mouseLogger;
         private readonly AudioRecorder _audioRecorder;
         private readonly VideoRecorder _videoRecorder;
+        private string _startTime;
     }
 }

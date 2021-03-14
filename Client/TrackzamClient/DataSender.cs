@@ -21,9 +21,9 @@ namespace TrackzamClient
             SendFileAsync("send_audio_file", path, "8080");
         }
         
-        public static void SendVideoFile(string path)
+        public static void SendVideoFile(string path, string startTime)
         {
-            SendFileAsync("send_video_file", path, "8080");
+            SendFileAsync("send_video_file", path, "8080", "&start_time="+startTime);
         }
         
         public static void SendKeyboardLogs(string path)
@@ -41,9 +41,9 @@ namespace TrackzamClient
             SendFileAsync("send_window_logs", path);
         }
         
-        private static async void SendFileAsync(string type, string path, string port = "8000")
+        private static async void SendFileAsync(string type, string path, string port = "8000", string additionalKeys = "")
         {
-            var client = new RestClient("http://"+_ipAddress+":"+port+"/api/"+type+"?email="+InfoSaver.GetEmail());
+            var client = new RestClient("http://"+_ipAddress+":"+port+"/api/"+type+"?email="+InfoSaver.GetEmail()+additionalKeys);
             var request = new RestRequest(Method.POST);
             request.AddHeader("cache-control", "no-cache");
             request.AddHeader("authorization", "Basic "+InfoSaver.AuthToken);
