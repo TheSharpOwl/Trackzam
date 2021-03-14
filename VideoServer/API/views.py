@@ -25,7 +25,6 @@ from VideoAnalyser.detection import split_video, gen_states
 def send_video_file(request):
     email = request.query_params['email']
     print(email)
-    code = request.META['HTTP_AUTHORIZATION']
 
     print("In send", end='\n')
     file = request.FILES['file']
