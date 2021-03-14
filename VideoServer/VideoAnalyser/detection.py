@@ -70,11 +70,11 @@ def gen_states(username, filename, amount, stamp):
     loc_of_log_file = "VideoServer/LogFiles/"+username+"/"+filename
     access_rights = 0o777
     if not os.path.isdir(dir_of_user):
-        os.mkdir(dir_of_user, access_rights)
+        os.makedirs(dir_of_user, access_rights, exist_ok=True)
     f = open(loc_of_log_file, "w")
     frames_dir = "VideoServer/VideoAnalyser/"+username+"/"+filename.split('.')[0]
     delta = datetime.timedelta(seconds=1)
-    stamp_temp = stamp.split('%')
+    stamp_temp = stamp.split(' ')
     print(stamp_temp)
     date_temp = stamp_temp[0].split('/')
     time_temp = stamp_temp[1].split(':')
