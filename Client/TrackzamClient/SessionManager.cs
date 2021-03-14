@@ -5,6 +5,7 @@ namespace TrackzamClient
 {
     public class SessionManager
     {
+        //Indicates whether some session is in progress or not 
         public bool IsSessionInProgress;
         public SessionManager()
         {
@@ -16,6 +17,12 @@ namespace TrackzamClient
             _videoRecorder = new VideoRecorder(1,4);
         }
         
+        /*
+         * Starts new recording session:
+         * 
+         * Creates a dedicated directory for a new session
+         * Starts all recording modules
+         */
         public void StartNewSession()
         {
             if(!Directory.Exists(ConfigManager.StorageDirectory+"/Trackzam"))
@@ -31,6 +38,13 @@ namespace TrackzamClient
             _startTime = TrackzamTimer.GetTimestampString();
         }
 
+        /*
+         * Ends session:
+         *
+         * Stops all recording modules
+         * Opens explorer window with recorded files
+         * Tells DataSender to start sending files asynchronously
+         */
         public void EndSession()
         {
             if (!IsSessionInProgress) return;
@@ -46,12 +60,12 @@ namespace TrackzamClient
             System.Diagnostics.Process.Start("explorer.exe", _sessionFolderPath);
             
             DataSender.SetIPAdress(ConfigManager.ServerIP);
-            DataSender.SendAudioLogs(_sessionFolderPath+"/audioVolume.txt");
-            DataSender.SendAudioFile(_sessionFolderPath+"/microphone.wav");
             DataSender.SendVideoFile(_sessionFolderPath+"/videoCapture.mp4", _startTime);
             DataSender.SendKeyboardLogs(_sessionFolderPath+"/keyboard.txt");
             DataSender.SendMouseLogs(_sessionFolderPath+"/mouse.txt");
             DataSender.SendWindowLogs(_sessionFolderPath+"/activeWindow.txt");
+            DataSender.SendAudioLogs(_sessionFolderPath+"/audioVolume.txt");
+            DataSender.SendAudioFile(_sessionFolderPath+"/microphone.wav");
             
             Console.WriteLine("Sent");
         }

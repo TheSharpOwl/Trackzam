@@ -23,7 +23,7 @@ namespace TrackzamClient
         
         public bool TryLogin(string login, string password, string email)
         {
-            var client = new RestClient("http://"+DataSender.IPAddress+":8000/api/check_user");
+            var client = new RestClient("http://"+ConfigManager.ServerIP+":8000/api/check_user");
             var request = new RestRequest(Method.POST);
             request.AddHeader("cache-control", "no-cache");
             string authtoken = System.Convert.ToBase64String(System.Text.Encoding.GetEncoding("ISO-8859-1").GetBytes(login + ":" + password));

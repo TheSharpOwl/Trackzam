@@ -14,6 +14,11 @@ namespace TrackzamClient
             _volumeLogUpdatePeriod = volumeLogUpdatePeriodMilliseconds;
         }
 
+        /*
+         * Starts audio recording
+         *
+         * Initialises WAVE writer and timer for volume logging
+         */
         public void StartRecord(string filePath)
         {
             _outputFilename = filePath;
@@ -36,11 +41,20 @@ namespace TrackzamClient
             _waveIn.StartRecording();
         }
         
+        /*
+         * Stops audio recording
+         *
+         * Just closes each stream and writer
+         */
         public void StopRecording()
         {
             _dispatcherTimer.Stop();
             _waveIn.StopRecording();
             _audioVolumeWriter.Close();
+            _waveIn.Dispose();
+            _waveIn = null;
+            _writer.Close();
+            _writer = null;
         }
         
         private void waveIn_DataAvailable(object sender, WaveInEventArgs e)
@@ -56,10 +70,6 @@ namespace TrackzamClient
 
         private void waveIn_RecordingStopped(object sender, EventArgs e)
         {
-            _waveIn.Dispose();
-            _waveIn = null;
-            _writer.Close();
-            _writer = null;
         }
         
         private void LogVolume(WaveInEventArgs e)

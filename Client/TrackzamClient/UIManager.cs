@@ -4,6 +4,9 @@ using System.Windows.Controls;
 
 namespace TrackzamClient
 {
+    /*
+     * A lot of methods for UI creation - buttons, windows, panels, text input fields
+     */
     public static class UIManager
     {
         public static void Initialize(StackPanel stackPanel, double width, double height)
@@ -13,6 +16,9 @@ namespace TrackzamClient
             _height = height;
         }
 
+        /*
+         * Adds a button to private StackPanel and returns it
+         */
         public static Button AddButton(string text, RoutedEventHandler handler)
         {
             Button button = new Button();
@@ -22,30 +28,45 @@ namespace TrackzamClient
             return button;
         }
 
+        /*
+         * Aligns given element to center
+         */
         public static void AlignCenter(Control contentControl)
         {
             contentControl.HorizontalAlignment = HorizontalAlignment.Center;
             contentControl.VerticalAlignment = VerticalAlignment.Center;
         }
 
+        /*
+         * Sets element size
+         */
         public static void SetSize(Control contentControl, double width, double height)
         {
             contentControl.Width = width;
             contentControl.Height = height;
         }
 
+        /*
+         * Sets panel size (panel is not a usual element like button)
+         */
         public static void SetPanelSize(Panel panel, double width, double height)
         {
             panel.Width = width;
             panel.Height = height;
         }
         
+        /*
+         * Sets text block size
+         */
         public static void SetTextBlockSize(TextBlock textBlock, double width, double height)
         {
             textBlock.Width = width;
             textBlock.Height = height;
         }
 
+        /*
+         * Creates and returns a new text block
+         */
         public static TextBlock NewTextBlock(string content, double width, double height)
         {
             TextBlock textBlock = new TextBlock();
@@ -55,16 +76,25 @@ namespace TrackzamClient
             return textBlock;
         }
         
+        /*
+         * Sets a given button's text
+         */
         public static void UpdateButtonText(Button button, string newText)
         {
             button.Content = newText;
         }
 
+        /*
+         * Sets a given text block's text
+         */
         public static void UpdateTextBlockText(TextBlock textBlock, string newText)
         {
             textBlock.Text = newText;
         }
 
+        /*
+         * Creates and returns a new Text Block
+         */
         public static TextBlock AddTextBlock()
         {
             TextBlock textBlock = new TextBlock();
@@ -72,18 +102,20 @@ namespace TrackzamClient
             return textBlock;
         }
 
-        public static TextBox AddTextBox(RoutedEventHandler handler)
-        {
-            TextBox textBox = new TextBox();
-            _stackPanel.Children.Add(textBox);
-            return textBox;
-        }
-
+        /*
+         * Shows a little window with message
+         */
         public static void ShowMessage(string message)
         {
             MessageBox.Show(message);
         }
         
+        /*
+         * Initializes and opens a login window
+         *
+         * Adds all buttons and text input fields inside itself
+         * Adds all event handlers inside buttons' logic
+         */
         public static void OpenLoginWindow(Action<(string login, string pass, string email)> eventHandler)
         {
             _loginWindow = OpenWindow("login", _width, _height);

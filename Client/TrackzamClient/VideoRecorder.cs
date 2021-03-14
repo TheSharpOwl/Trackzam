@@ -26,6 +26,12 @@ namespace TrackzamClient
             _resolutionDivisor = resolutionLoweringDivisor;
         }
 
+        /*
+         * Starts video recording:
+         *
+         * Starts timer to control fps
+         * Starts video capture device
+         */
         public void StartRecording(string path)
         {
             _filePath = path;
@@ -36,6 +42,13 @@ namespace TrackzamClient
             _dispatcherTimer.Start();
         }
         
+        /*
+         * Stops video recording:
+         *
+         * Fetches FFMPEG library
+         * Initializes video encoding to mp4
+         * Creates video file frame by frame
+         */
         public void StopRecording()
         {
             _videoCaptureDevice.SignalToStop();

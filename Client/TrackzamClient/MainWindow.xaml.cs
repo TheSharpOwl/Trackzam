@@ -5,6 +5,8 @@ namespace TrackzamClient
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
+    ///
+    /// Starting point of the application, where everything is being initialized
     /// </summary>
     public partial class MainWindow : Window
     {
