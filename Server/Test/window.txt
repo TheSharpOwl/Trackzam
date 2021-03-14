@@ -1,0 +1,6 @@
+27/12/2020 12:45:13 TrackzamClient-Microsoft Visual Studio
+27/12/2020 12:45:14 MainWindow
+27/12/2020 12:45:15 Yandex.Music
+27/12/2020 12:45:16 MainWindow
+27/12/2020 12:45:17 Yandex.Music
+27/12/2020 12:45:18 MainWindow
