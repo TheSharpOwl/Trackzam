@@ -27,12 +27,6 @@ namespace TrackzamClient
             contentControl.HorizontalAlignment = HorizontalAlignment.Center;
             contentControl.VerticalAlignment = VerticalAlignment.Center;
         }
-        
-        public static void AlignCenterPanel(Panel panel)
-        {
-            panel.HorizontalAlignment = HorizontalAlignment.Center;
-            panel.VerticalAlignment = VerticalAlignment.Center;
-        }
 
         public static void SetSize(Control contentControl, double width, double height)
         {
@@ -90,7 +84,7 @@ namespace TrackzamClient
             MessageBox.Show(message);
         }
         
-        public static void OpenLoginWindow(Action<(string login, string pass)> eventHandler)
+        public static void OpenLoginWindow(Action<(string login, string pass, string email)> eventHandler)
         {
             _loginWindow = OpenWindow("login", _width, _height);
             _loginStackPanel = new StackPanel();
@@ -119,11 +113,23 @@ namespace TrackzamClient
                 _passFocus = true;
             };
             
+            TextBlock emailText = NewTextBlock("Email:", _width / 4, _height / 30);
+            
+            TextBox emailInput = new TextBox();
+            SetSize(emailInput, _width/4, _height/20);
+            emailInput.Text = "Type Email Here";
+            emailInput.GotFocus += (sender, args) => 
+            { 
+                if (_emailFocus) return;
+                emailInput.Text = "";
+                _emailFocus = true;
+            };
+            
             Button loginButton = new Button();
             loginButton.Content = "Login";
             loginButton.Click += (sender, args) =>
             {
-                eventHandler.Invoke((loginInput.Text, passInput.Text));
+                eventHandler.Invoke((loginInput.Text, passInput.Text, emailInput.Text));
             };
             
 
@@ -131,6 +137,8 @@ namespace TrackzamClient
             _loginStackPanel.Children.Add(loginInput);
             _loginStackPanel.Children.Add(passText);
             _loginStackPanel.Children.Add(passInput);
+            _loginStackPanel.Children.Add(emailText);
+            _loginStackPanel.Children.Add(emailInput);
             _loginStackPanel.Children.Add(loginButton);
             _loginWindow.Content = _loginStackPanel;
 
@@ -139,6 +147,7 @@ namespace TrackzamClient
 
         private static bool _loginFocus = false;
         private static bool _passFocus = false;
+        private static bool _emailFocus = false;
 
         private static Window OpenWindow(string name, double width, double height)
         {
