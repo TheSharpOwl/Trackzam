@@ -83,7 +83,7 @@ def gen_states_for_audio(time1, time2, log:list):
             else:
                 state = int(state_temp[0])
             if float(state) > 0.1:
-                i['state'] = 'loud noise'
+                i['state'] = 'Loud_noise'
                 out.append(i) 
     print(out)
     print('\n')
