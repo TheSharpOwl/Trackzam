@@ -23,7 +23,7 @@ from VideoAnalyser.detection import split_video, gen_states
 @permission_classes([IsAuthenticated])
 @api_view(['POST'])
 def send_video_file(request):
-    keyuser = request.data['keyname']
+    keyuser = request.query_params['keyname']
     print(keyuser)
     code = request.META['HTTP_AUTHORIZATION']
 
@@ -59,7 +59,7 @@ def send_video_file(request):
 @permission_classes([IsAuthenticated])
 @api_view(['POST'])
 def send_audio_file(request):
-    user = request.user
+    keyuser = request.query_params['keyname']
     print("In send", end='\n')
     file = request.FILES['file']
     newFile = AudioFile.create(file)
