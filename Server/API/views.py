@@ -26,13 +26,13 @@ from API.serializers import VideoRecordSerializer
 @permission_classes([IsAuthenticated])
 @api_view(['POST'])
 def send_audio_logs(request):
-    keyuser = request.query_params['keyname']
-    print(keyuser)
+    email = request.query_params['email']
+    print(email)
     print("In send", end='\n')
     file = request.FILES['file']
     list = parse_into_list(file)
     for record in list:
-        newRecord = AudioRecord.create(keyuser, record['date'], record['time'], record['state'])
+        newRecord = AudioRecord.create(email, record['date'], record['time'], record['state'])
         newRecord.save()
     return Response({'message': 'Audio logs uploaded'}, status=status.HTTP_201_CREATED)
 
@@ -53,13 +53,13 @@ def show_audio(request):
 @permission_classes([IsAuthenticated])
 @api_view(['POST'])
 def send_keyboard_logs(request):
-    keyuser = request.query_params['keyname']
-    print(keyuser)
+    email = request.query_params['email']
+    print(email)
     print("In send", end='\n')
     file = request.FILES['file']
     list = parse_into_list(file)
     for record in list:
-        newRecord = KeyboardRecord.create(keyuser, record['date'], record['time'], record['state'])
+        newRecord = KeyboardRecord.create(email, record['date'], record['time'], record['state'])
         newRecord.save()
     return Response({'message': 'Keyboard logs uploaded'}, status=status.HTTP_201_CREATED)
 
@@ -80,13 +80,13 @@ def show_keyboard(request):
 @permission_classes([IsAuthenticated])
 @api_view(['POST'])
 def send_mouse_logs(request):
-    keyuser = request.query_params['keyname']
-    print(keyuser)
+    email = request.query_params['email']
+    print(email)
     print("In send", end='\n')
     file = request.FILES['file']
     list = parse_into_list(file)
     for record in list:
-        newRecord = MouseRecord.create(keyuser, record['date'], record['time'], record['state'])
+        newRecord = MouseRecord.create(email, record['date'], record['time'], record['state'])
         newRecord.save()
     return Response({'message': 'Mouse logs uploaded'}, status=status.HTTP_201_CREATED)
 
@@ -108,13 +108,13 @@ def show_mouse(request):
 @permission_classes([IsAuthenticated])
 @api_view(['POST'])
 def send_window_logs(request):
-    keyuser = request.query_params['keyname']
-    print(keyuser)
+    email = request.query_params['email']
+    print(email)
     print("In send", end='\n')
     file = request.FILES['file']
     list = parse_into_list(file)
     for record in list:
-        newRecord = WindowRecord.create(keyuser, record['date'], record['time'], record['state'])
+        newRecord = WindowRecord.create(email, record['date'], record['time'], record['state'])
         newRecord.save()
     return Response({'message': 'Window logs uploaded'}, status=status.HTTP_201_CREATED)
 
@@ -136,13 +136,13 @@ def show_window(request):
 @api_view(['POST'])
 #@user_passes_test(lambda u: u.is_superuser)
 def send_video_logs(request):
-    keyuser = request.query_params['keyname']
-    print(keyuser)
+    email = request.query_params['email']
+    print(email)
     print("In send", end='\n')
     file = request.FILES['file']
     list = parse_into_list(file)
     for record in list:
-        newRecord = VideoRecord.create(keyuser, record['date'], record['time'], record['state'])
+        newRecord = VideoRecord.create(email, record['date'], record['time'], record['state'])
         newRecord.save()
     return Response({'message': 'Video logs uploaded'}, status=status.HTTP_201_CREATED)
 
@@ -161,7 +161,7 @@ def show_video(request):
 @csrf_exempt
 @authentication_classes([BasicAuthentication])
 @permission_classes([IsAuthenticated])
-@api_view(['POST'])
+@api_view(['GET'])
 def check_user(request):
     print("In send", end='\n')
     return Response({'message': 'Credentials are correct.'}, status=status.HTTP_200_OK)
