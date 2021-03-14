@@ -161,7 +161,7 @@ def show_video(request):
 @csrf_exempt
 @authentication_classes([BasicAuthentication])
 @permission_classes([IsAuthenticated])
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def check_user(request):
     print("In send", end='\n')
     return Response({'message': 'Credentials are correct.'}, status=status.HTTP_200_OK)
