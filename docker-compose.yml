@@ -20,6 +20,7 @@ services:
     volumes:
       - .:/code
     environment:
+      - host_ip=34.71.243.7
       - self_port=8000
       - DJANGO_SU_NAME=adminadmin
       - DJANGO_SU_EMAIL=admin@admin.ru
@@ -44,6 +45,7 @@ services:
     volumes:
       - .:/code
     environment:
+      - host_ip=34.71.243.7
       - self_port=8080
       - Server_port=8000
       - DJANGO_SU_NAME=adminadmin
