@@ -2,10 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Windows.Input;
-using System.Windows.Threading;
 using System.Windows.Forms;
-using System.Threading;
 
 namespace TrackzamClient
 {

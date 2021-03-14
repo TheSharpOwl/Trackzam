@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 
 namespace TrackzamClient
@@ -18,6 +17,8 @@ namespace TrackzamClient
             _userLogin.RetrieveLoginStatus();
             
             InitializeUI();
+            
+            ConfigManager.RetrieveConfigData(_curDirTextBlock);
         }
 
         private void InitializeUI()
@@ -46,7 +47,6 @@ namespace TrackzamClient
             _changeDirButton = UIManager.AddButton("Change storage directory", ChangeDirectory);
             UIManager.AlignCenter(_changeDirButton);
             UIManager.SetSize(_changeDirButton, Width / 4, Height / 20);
-            _storageDirManager = new StorageDirectoryManager(_curDirTextBlock, _changeDirButton);
         }
 
         private void OpenLoginWindow(object sender, RoutedEventArgs routedEventArgs)
@@ -54,9 +54,9 @@ namespace TrackzamClient
             UIManager.OpenLoginWindow(TryLogin);
         }
 
-        private void TryLogin((string login, string pass) authData)
+        private void TryLogin((string login, string pass, string email) authData)
         {
-            if (_userLogin.TryLogin(authData.login, authData.pass))
+            if (_userLogin.TryLogin(authData.login, authData.pass, authData.email))
             {
                 UIManager.CloseLoginWindow();
                 _stackPanel.Children.Remove(_loginButton);
@@ -90,16 +90,14 @@ namespace TrackzamClient
         {
             if (_sessionManager.IsSessionInProgress) 
                 _sessionManager.EndSession();
-            
         }
 
         private void ChangeDirectory(object sender, RoutedEventArgs routedEventArgs)
         {
-            StorageDirectoryManager.ChangeFolder();
+            ConfigManager.SetStorageDirectory();
         }
 
         private UserLogin _userLogin;
-        private StorageDirectoryManager _storageDirManager;
         
         private StackPanel _stackPanel;
         private Button _sessionControlButton;

