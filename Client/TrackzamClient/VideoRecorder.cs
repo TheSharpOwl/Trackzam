@@ -22,7 +22,8 @@ namespace TrackzamClient
             _dispatcherTimer = new DispatcherTimer();
             _dispatcherTimer.Tick += OnTimerTick;
             _dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, (int)(1.0/frameRate*1000.0));
-
+            
+            FFmpegLoader.FFmpegPath = Directory.GetCurrentDirectory() + "\\FFMPEG";
             _resolutionDivisor = resolutionLoweringDivisor;
         }
 
@@ -53,7 +54,6 @@ namespace TrackzamClient
         {
             _videoCaptureDevice.SignalToStop();
             _dispatcherTimer.Stop();
-            FFmpegLoader.FFmpegPath = Directory.GetCurrentDirectory() + "\\FFMPEG";
             var settings = new VideoEncoderSettings(width: _width, height: _height, framerate: 1, codec: VideoCodec.H264);
             settings.EncoderPreset = EncoderPreset.Fast;
             settings.CRF = 17;
