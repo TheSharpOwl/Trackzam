@@ -16,26 +16,33 @@ namespace TrackzamClient
             _mouseLogger = new Mouselogger();
             _videoRecorder = new VideoRecorder(1,4);
         }
-        
-        /*
-         * Starts new recording session:
-         * 
-         * Creates a dedicated directory for a new session
-         * Starts all recording modules
-         */
+
+        /// <summary>
+        ///  Starts new recording session:
+        ///  Creates a dedicated directory for a new session
+        ///  Starts all recording modules
+        ///  Shows an error windows in case of exception with the message of that exception
+        /// </summary>
         public void StartNewSession()
         {
-            if(!Directory.Exists(ConfigManager.StorageDirectory+"/Trackzam"))
-                Directory.CreateDirectory(ConfigManager.StorageDirectory+"/Trackzam");
-            _sessionFolderPath = Directory.CreateDirectory(ConfigManager.StorageDirectory+"/Trackzam/"+TrackzamTimer.GetNowString()).FullName;
-            
-            _audioRecorder.StartRecord(_sessionFolderPath);
-            _keylogger.Start(_sessionFolderPath);
-            _mouseLogger.Start(_sessionFolderPath);
-            _windowLogger.StartLogging(_sessionFolderPath);
-            _videoRecorder.StartRecording(_sessionFolderPath);
-            IsSessionInProgress = true;
-            _startTime = TrackzamTimer.GetTimestampString();
+            try
+            {
+                if (!Directory.Exists(ConfigManager.StorageDirectory + "/Trackzam"))
+                    Directory.CreateDirectory(ConfigManager.StorageDirectory + "/Trackzam");
+                _sessionFolderPath = Directory.CreateDirectory(ConfigManager.StorageDirectory + "/Trackzam/" + TrackzamTimer.GetNowString()).FullName;
+
+                _audioRecorder.StartRecord(_sessionFolderPath);
+                _keylogger.Start(_sessionFolderPath);
+                _mouseLogger.Start(_sessionFolderPath);
+                _windowLogger.StartLogging(_sessionFolderPath);
+                _videoRecorder.StartRecording(_sessionFolderPath);
+                IsSessionInProgress = true;
+                _startTime = TrackzamTimer.GetTimestampString();
+            }
+            catch (Exception e)
+            {
+                UIManager.ShowMessage(e.Message);
+            }
         }
 
         /*
@@ -48,24 +55,31 @@ namespace TrackzamClient
         public void EndSession()
         {
             if (!IsSessionInProgress) return;
-            
+
             IsSessionInProgress = false;
-            
-            _audioRecorder.StopRecording();
-            _keylogger.Stop();
-            _mouseLogger.Stop();
-            _windowLogger.StopLogging();
-            _videoRecorder.StopRecording();
-            
-            System.Diagnostics.Process.Start("explorer.exe", _sessionFolderPath);
-            
-            DataSender.SetIPAdress(ConfigManager.ServerIP);
-            DataSender.SendVideoFile(_sessionFolderPath+"/videoCapture.mp4", _startTime);
-            DataSender.SendKeyboardLogs(_sessionFolderPath+"/keyboard.txt");
-            DataSender.SendMouseLogs(_sessionFolderPath+"/mouse.txt");
-            DataSender.SendWindowLogs(_sessionFolderPath+"/activeWindow.txt");
-            DataSender.SendAudioLogs(_sessionFolderPath+"/audioVolume.txt");
-            DataSender.SendAudioFile(_sessionFolderPath+"/microphone.wav");
+            try
+            {
+
+                _audioRecorder.StopRecording();
+                _keylogger.Stop();
+                _mouseLogger.Stop();
+                _windowLogger.StopLogging();
+                _videoRecorder.StopRecording();
+
+                System.Diagnostics.Process.Start("explorer.exe", _sessionFolderPath);
+
+                DataSender.SetIPAdress(ConfigManager.ServerIP);
+                DataSender.SendVideoFile(_sessionFolderPath + "/videoCapture.mp4", _startTime);
+                DataSender.SendKeyboardLogs(_sessionFolderPath + "/keyboard.txt");
+                DataSender.SendMouseLogs(_sessionFolderPath + "/mouse.txt");
+                DataSender.SendWindowLogs(_sessionFolderPath + "/activeWindow.txt");
+                DataSender.SendAudioLogs(_sessionFolderPath + "/audioVolume.txt");
+                DataSender.SendAudioFile(_sessionFolderPath + "/microphone.wav");
+            }
+            catch (Exception e)
+            {
+                UIManager.ShowMessage(e.Message);
+            }
             
             Console.WriteLine("Sent");
         }

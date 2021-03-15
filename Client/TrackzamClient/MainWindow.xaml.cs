@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace TrackzamClient
@@ -58,15 +59,23 @@ namespace TrackzamClient
 
         private void TryLogin((string login, string pass, string email) authData)
         {
-            if (_userLogin.TryLogin(authData.login, authData.pass, authData.email))
+            try
             {
-                UIManager.CloseLoginWindow();
-                _stackPanel.Children.Remove(_loginButton);
+                if (_userLogin.TryLogin(authData.login, authData.pass, authData.email))
+                {
+                    UIManager.CloseLoginWindow();
+                    _stackPanel.Children.Remove(_loginButton);
+                }
+                else
+                {
+                    UIManager.ShowMessage("Incorrect login or password");
+                }
             }
-            else
+            catch (Exception e)
             {
-                UIManager.ShowMessage("Incorrect login or password");
+                UIManager.ShowMessage(e.Message);
             }
+
         }
 
         private void Session_control(object sender, RoutedEventArgs routedEventArgs)
