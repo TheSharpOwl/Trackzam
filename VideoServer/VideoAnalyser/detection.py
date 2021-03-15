@@ -75,7 +75,7 @@ def gen_states(username, filename, amount, stamp):
     frames_dir = "VideoServer/VideoAnalyser/"+username+"/"+filename.split('.')[0]
     delta = datetime.timedelta(seconds=1)
     stamp_temp = stamp.split(' ')
-    print(stamp_temp)
+    #print(stamp_temp)
     date_temp = stamp_temp[0].split('/')
     time_temp = stamp_temp[1].split(':')
     timestamp = datetime.datetime(int(date_temp[2]),int(date_temp[1]),int(date_temp[0]),

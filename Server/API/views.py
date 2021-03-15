@@ -30,7 +30,7 @@ from API.state_processor import generate
 def send_audio_logs(request):
     email = request.query_params['email']
     print(email)
-    print("In send", end='\n')
+    print("Processing the request", end='\n')
     file = request.FILES['file']
     list = parse_into_list(file)
     for record in list:
@@ -57,7 +57,7 @@ def show_audio(request):
 def send_keyboard_logs(request):
     email = request.query_params['email']
     print(email)
-    print("In send", end='\n')
+    print("Processing the request", end='\n')
     file = request.FILES['file']
     list = parse_into_list(file)
     for record in list:
@@ -84,7 +84,7 @@ def show_keyboard(request):
 def send_mouse_logs(request):
     email = request.query_params['email']
     print(email)
-    print("In send", end='\n')
+    print("Processing the request", end='\n')
     file = request.FILES['file']
     list = parse_into_list(file)
     for record in list:
@@ -112,7 +112,7 @@ def show_mouse(request):
 def send_window_logs(request):
     email = request.query_params['email']
     print(email)
-    print("In send", end='\n')
+    print("Processing the request", end='\n')
     file = request.FILES['file']
     list = parse_into_list(file)
     for record in list:
@@ -140,7 +140,7 @@ def show_window(request):
 def send_video_logs(request):
     email = request.query_params['email']
     print(email)
-    print("In send", end='\n')
+    print("Processing the request", end='\n')
     file = request.FILES['file']
     list = parse_into_list(file)
     for record in list:
@@ -165,7 +165,7 @@ def show_video(request):
 @permission_classes([IsAuthenticated])
 @api_view(['GET', 'POST'])
 def check_user(request):
-    print("In send", end='\n')
+    print("Processing the request", end='\n')
     return Response({'message': 'Credentials are correct.'}, status=status.HTTP_200_OK)
 
 
@@ -176,7 +176,7 @@ def check_user(request):
 @api_view(['GET'])
 @user_passes_test(lambda u: u.is_superuser)
 def get_suspicious(request):
-    print("In send", end='\n')
+    print("Processing the request", end='\n')
     start_day = request.query_params["start_day"]
     end_day = request.query_params["end_day"]
     email = request.query_params["email"]
@@ -193,31 +193,31 @@ def get_suspicious(request):
         date__range=[start_date,end_date]
     )
     data1 = MouseRecordSerializer(records1, many=True).data
-    print(data1)
+    #print(data1)
 
     records2 = KeyboardRecord.objects.using('default').filter(username=email).filter(
         date__range=[start_date,end_date]
     )
     data2 = KeyboardRecordSerializer(records2, many=True).data
-    print(data2)
+    #print(data2)
 
     records3 = AudioRecord.objects.using('default').filter(username=email).filter(
         date__range=[start_date,end_date]
     )
     data3 = AudioRecordSerializer(records3, many=True).data
-    print(data3)
+    #print(data3)
 
     records4 = VideoRecord.objects.using('default').filter(username=email).filter(
         date__range=[start_date,end_date]
     )
     data4 = VideoRecordSerializer(records4, many=True).data
-    print(data4)
+    #print(data4)
 
     records5 = WindowRecord.objects.using('default').filter(username=email).filter(
         date__range=[start_date,end_date]
     )
     data5 = WindowRecordSerializer(records5, many=True).data
-    print(data5)
+    #print(data5)
 
     t1 = datetime.datetime(int(start_date_split[2]), int(start_date_split[1]),
                            int(start_date_split[0]),0,0,0)

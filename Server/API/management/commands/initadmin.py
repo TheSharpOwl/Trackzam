@@ -22,4 +22,4 @@ class Command(BaseCommand):
             superuser.save()
 
         else:
-            print('Admin accounts can only be initialized if it does not exist')
+            print('Admin with name '+ DJANGO_SU_NAME +' already exists')

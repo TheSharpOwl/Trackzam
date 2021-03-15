@@ -62,7 +62,6 @@ def generate(time1, time2, log_m, log_k, log_a, log_v, log_w):
                 amogus.append(sus_a[k_a])
                 k_a += 1
 
-        #if time_temp < timestamp1 and time_temp < timestamp2 and time_temp < timestamp3:
         
         time_temp += delta
     
@@ -84,9 +83,9 @@ def gen_states_for_audio(time1, time2, log:list):
                 state = int(state_temp[0])
             if float(state) > 0.1:
                 i['state'] = 'Loud_noise'
-                out.append(i) 
-    print(out)
-    print('\n')
+                out.append(i)
+    #print(out)
+    #print('\n')
     return out
 
 def gen_states_for_video(time1, time2, log:list): 
@@ -98,8 +97,8 @@ def gen_states_for_video(time1, time2, log:list):
         if timestamp >= time1 and timestamp <= time2:
             if i['state']!='Present':
                 out.append(i) 
-    print(out)
-    print('\n')
+    #print(out)
+    #print('\n')
     return out
 
 def gen_states_for_window(time1, time2, log_w:list): 
@@ -111,8 +110,8 @@ def gen_states_for_window(time1, time2, log_w:list):
         if timestamp >= time1 and timestamp <= time2:
             i['state'] = "Window_Focus_Changed_To_" + i['state']
             out.append(i) 
-    print(out)
-    print('\n')
+    #print(out)
+    #print('\n')
     return out
 
 #f_w = open('C:/Users/Jameel/Desktop/Trackzam/Server/Test/window.txt', 'r')

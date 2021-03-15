@@ -26,13 +26,13 @@ def send_video_file(request):
     email = request.query_params['email']
     print(email)
 
-    print("In send", end='\n')
+    print("Processing the request", end='\n')
     file = request.FILES['file']
     newFile = VideoFile.create(file)
     newFile.save(using='default')
 
     stamp = request.query_params["start_time"]
-    print(stamp)
+    #print(stamp)
 
     filename = newFile.file.name.split('/')[-1]
     amount = split_video(email, filename)
@@ -49,7 +49,6 @@ def send_video_file(request):
         r = requests.post(url, files = {'file': f}, params=parameters
                           , auth=HTTPBasicAuth(DJANGO_SU_NAME, DJANGO_SU_PASSWORD),
                           headers={'enctype': "multipart/form-data"})
-        print(r.request.body)
 
     return Response({'message': 'File is uploaded'}, status=status.HTTP_201_CREATED)
 
@@ -59,7 +58,7 @@ def send_video_file(request):
 @api_view(['POST'])
 def send_audio_file(request):
     email = request.query_params['email']
-    print("In send", end='\n')
+    print("Processing the request", end='\n')
     file = request.FILES['file']
     newFile = AudioFile.create(file)
     newFile.save(using='default')

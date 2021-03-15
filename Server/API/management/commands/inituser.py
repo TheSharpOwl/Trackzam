@@ -21,4 +21,4 @@ class Command(BaseCommand):
             user.save()
 
         else:
-            print('User already exists')
+            print('User with that name '+ DJANGO_U_NAME +' already exists')
