@@ -27,47 +27,58 @@ def generate(time1, time2, log_m, log_k, log_a, log_v, log_w):
     sus_w = gen_states_for_window(time1,time2, log_w)
     delta = datetime.timedelta(seconds=1)
     time_temp = time1
+
+    INF = datetime.datetime(3000,1,1,1,1,1)
+
     k_v = 0
     k_a = 0
     k_w = 0
-    k_v_old = 0
-    k_a_old = 0
-    k_w_old = 0
     amogus = []
-    while time_temp < time2 :
 
+    while (True):
+        d = [0,0,0]
         if k_w < len(sus_w):
-            date = sus_w[k_w]['date'].split('-')
-            time = sus_w[k_w]['time'].split(':')
-            timestamp1 = datetime.datetime(int(date[0]),int(date[1]),int(date[2]),int(time[0]),int(time[1]),int(time[2]))
-            if timestamp1 == time_temp:
-                amogus.append(sus_w[k_w])
-                k_w += 1
-
+            date_w = sus_w[k_w]['date'].split('-')
+            time_w = sus_w[k_w]['time'].split(':')
+            timestamp_w = datetime.datetime(int(date_w[0]),int(date_w[1]),int(date_w[2]),int(time_w[0]),int(time_w[1]),int(time_w[2]))
+            d[0] = timestamp_w
+        else:
+            d[0] = INF
         if k_v < len(sus_v):
-            date = sus_v[k_v]['date'].split('-')
-            time = sus_v[k_v]['time'].split(':')
-            timestamp2 = datetime.datetime(int(date[0]),int(date[1]),int(date[2]),int(time[0]),int(time[1]),int(time[2]))
-            if timestamp2 == time_temp:
-                amogus.append(sus_v[k_v])
-                k_v += 1
-            
-            
+            date_v = sus_v[k_v]['date'].split('-')
+            time_v = sus_v[k_v]['time'].split(':')
+            timestamp_v = datetime.datetime(int(date_v[0]),int(date_v[1]),int(date_v[2]),int(time_v[0]),int(time_v[1]),int(time_v[2]))
+            d[1] = timestamp_v
+        else:
+            d[1] = INF
 
         if k_a < len(sus_a):
-            date = sus_a[k_a]['date'].split('-')
-            time = sus_a[k_a]['time'].split(':')
-            timestamp3 = datetime.datetime(int(date[0]),int(date[1]),int(date[2]),int(time[0]),int(time[1]),int(time[2]))
-            if timestamp3 == time_temp:
-                amogus.append(sus_a[k_a])
-                k_a += 1
+            date_a = sus_v[k_v]['date'].split('-')
+            time_a = sus_v[k_v]['time'].split(':')
+            timestamp_a = datetime.datetime(int(date_a[0]),int(date_a[1]),int(date_a[2]),int(time_a[0]),int(time_a[1]),int(time_a[2]))
+            d[2] = timestamp_a
+        else:
+            d[2] = INF
 
-        
-        time_temp += delta
-    
+        if d[0]<=d[1] and d[0]<=d[2]:
+            amogus.append(sus_w[k_w])
+            k_w += 1
+        elif d[1]<=d[0] and d[1]<=d[2]:
+            amogus.append(sus_v[k_v])
+            k_v += 1
+        elif d[2]<=d[0] and d[2]<=d[1]:
+            amogus.append(sus_a[k_a])
+            k_a += 1
+        else:
+            k_w += 1
+            k_v += 1
+            k_a += 1
 
+        if k_w >= len(sus_w) and k_v >= len(sus_v) and k_a >= len(sus_a):
+            break
 
     return amogus
+
 
 def gen_states_for_audio(time1, time2, log:list): 
     out = []

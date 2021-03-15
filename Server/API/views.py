@@ -220,7 +220,7 @@ def get_suspicious(request):
     #print(data5)
 
     t1 = datetime.datetime(int(start_date_split[2]), int(start_date_split[1]),
-                           int(start_date_split[0]),0,0,0)
+                           int(start_date_split[0]),0,0,1)
     t2 = datetime.datetime(int(end_date_split[2]), int(end_date_split[1]),
                            int(end_date_split[0]),23,59,59)
     log = generate(t1,t2,data1, data2, data3, data4, data5)
