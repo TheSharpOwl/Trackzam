@@ -13,14 +13,14 @@ def recognize():
         k+=1
      # Print the location of each face in this image
         top, right, bottom, left = face_location
-        print("A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}".format(top, left, bottom, right))
+        #print("A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}".format(top, left, bottom, right))
 
       # You can access the actual face itself like this:
         face_arr = image[top:bottom, left:right]
         pil_image = Image.fromarray(face_arr)
         pil_image.save("img" + str(k) + ".png")
 
-    print(face_locations)
+    #print(face_locations)
 
 def get_state(name):
     image = face_recognition.load_image_file(name)
@@ -35,7 +35,7 @@ def get_state(name):
 
 def split_video(username, filename):
     video_path = "VideoServer/VideoFiles/"
-    print(filename)
+    #print(filename)
     vidcap = cv2.VideoCapture(video_path+filename)
     success,image = vidcap.read()
     count = 0
@@ -52,16 +52,17 @@ def split_video(username, filename):
             os.mkdir(dir_of_user, access_rights)
         os.mkdir(dir_of_frames, access_rights)
     except OSError:
-        print ("Creation of the directory %s failed" % dir_of_frames)
+        pass
+        #print ("Creation of the directory %s failed" % dir_of_frames)
     else:
         print ("Successfully created the directory %s" % dir_of_frames)
 
         while success:
             save_dir = dir_of_frames+"/frame%d.jpg" % count
-            print(save_dir)
+            #print(save_dir)
             cv2.imwrite(save_dir, image)     # save frame as JPEG file
             success,image = vidcap.read()
-            print('Read a new frame: ', success)
+            #print('Read a new frame: ', success)
             count += 1
     return count
 

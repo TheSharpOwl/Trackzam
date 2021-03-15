@@ -9,7 +9,7 @@ def parse_into_list(file):
         time_and_state = line.split(' ')
         date = time_and_state[0]
         time = time_and_state[1]
-        state = time_and_state[2]
+        state = "_".join(time_and_state[2:])
         if state[-2:] == '\r\n':
             state = state[:-2]
         elif state[-1] == '\n':
