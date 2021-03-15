@@ -1,5 +1,0 @@
-{
-  "self": "http://127.0.0.1:8080/api/",
-  "self_port" : "8080",
-  "Server": "http://Server:8000/api/"
-}
