@@ -53,8 +53,8 @@ def generate(time1, time2, log_m, log_k, log_a, log_v, log_w):
             d[1] = INF
 
         if k_a < len(sus_a):
-            date_a = sus_v[k_v]['date'].split('-')
-            time_a = sus_v[k_v]['time'].split(':')
+            date_a = sus_a[k_a]['date'].split('-')
+            time_a = sus_a[k_a]['time'].split(':')
             timestamp_a = datetime.datetime(int(date_a[0]),int(date_a[1]),int(date_a[2]),int(time_a[0]),int(time_a[1]),int(time_a[2]))
             d[2] = timestamp_a
         else:
