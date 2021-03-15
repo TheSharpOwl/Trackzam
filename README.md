@@ -1,9 +1,9 @@
 # Trackzam
 Students tracker for lecturer's purposes.
 
-## How to Run:
+## How to Run servers:
 
-### install pip3, git, docker, docker-compose on your machine
+### install git, docker, docker-compose on your machine
 
 ### clone the repo in your machine
 ```
@@ -11,65 +11,22 @@ git clone https://github.com/TheSharpOwl/Trackzam.git
 cd Trackzam
 ```
 
-### Install all the requirements
+### Set proper environment variables in docker-compose.yml 
+By default:
 ```
-pip3 install -r Server/req.py
-pip3 install -r VideoServer/req.py
-```
+   - host_ip=34.71.243.7                    # should be public IP of the host
+   - self_port=8000                         
+   - DJANGO_SU_NAME=adminadmin              # administrator account with these credentials will be created 
+   - DJANGO_SU_EMAIL=admin@admin.ru         
+   - DJANGO_SU_PASSWORD=adminpassword       
+   - DJANGO_U_NAME=username                 # user account with these credentials will be created
+   - DJANGO_U_EMAIL=username@username.ru    
+   - DJANGO_U_PASSWORD=usernamepassword     
+```   
 
-### apply all migrations
-```
-python3 Server/manage.py makemigrations
-python3 Server/manage.py migrate
+### Make sure that firewall allows TCP connection on ports 8000 and 8080 (or custom ports if you changed them in docker-compose.yml)
 
-python3 VideoServer/manage.py makemigrations
-python3 VideoServer/manage.py migrate
-```
-
-### create superusers in both of the servers
-```
-python3 Server/manage.py createsuperuser and follow the process
-python3 VideoServer/manage.py createsuperuser and follow the process
-```
-
-### Specify config files Server/config.json Server/config.json
-
-
-### create regular users (the same users should be on both servers)
-  * you can use django admin panel
-  * you can use django shell
-```
-python3 Server/manage.py shell
-```
-and inside shell type
-```
-from django.contrib.auth.models import User
-user = User.objects.create_user('John', 'lennon@thebeatles.com', 'johnpassword')
-user.save()
-```
-
-Repeat for VideoServer
-```
-python3 VideoServer/manage.py shell
-```
-and inside shell type
-```
-from django.contrib.auth.models import User
-user = User.objects.create_user('John', 'lennon@thebeatles.com', 'johnpassword')
-user.save()
-```
-
-### Run the servers on different consoles
-```
-python3 Server/manage.py runserver
-python3 VideoServer/manage.py runserver
-```
-
-### If everything works fine, run the same thing using docker-compose
-
-  * If you changed ports in config files, do the same changes in **Server/Dockerfile VideoServer/Dockerfile docker-compose.yaml** files
-  
-  * Then from Trackzam directory run
+### Use docker-compose to build and run the application 
   ```
   docker-compose build
   docker-compose up
