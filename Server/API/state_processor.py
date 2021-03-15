@@ -1,25 +1,5 @@
 import datetime
 
-def parse_into_list(file):
-    log = []
-    for byte_line in file:
-        line = byte_line
-
-        time_and_state = line.split(' ')
-        date = time_and_state[0]
-        time = time_and_state[1]
-        state = time_and_state[2]
-        if state[-2:] == '\r\n':
-            state = state[:-2]
-        elif state[-1] == '\n':
-            state = state[:-1]
-
-        date_split = date.split("/")
-        date = date_split[2]+'-'+date_split[1]+'-'+date_split[0]
-
-        node = {'date':date,'time':time,'state':state}
-        log.append(node)
-    return log
 
 def generate(time1, time2, log_m, log_k, log_a, log_v, log_w):
     sus_v = gen_states_for_video(time1,time2, log_v)
