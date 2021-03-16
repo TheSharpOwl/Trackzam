@@ -33,7 +33,7 @@ By default:
   ```
   
 ## Client
-###[Latest release](https://github.com/TheSharpOwl/Trackzam/releases)
+### [Latest release](https://github.com/TheSharpOwl/Trackzam/releases)
 
 How to use client application
 
