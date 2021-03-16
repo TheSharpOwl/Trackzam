@@ -7,18 +7,22 @@ namespace TrackzamClient
 {
     public class AudioRecorder
     {
+        /// <summary>
+        /// Constructor for AudioRecorder
+        /// </summary>
+        /// <param name="sampleRate"> output audiofile samplerate in hertz </param>
+        /// <param name="volumeLogUpdatePeriodMilliseconds"> period for volume log append </param>
         public AudioRecorder(int sampleRate, int bits, int volumeLogUpdatePeriodMilliseconds)
         {
             _sampleRate = sampleRate;
             _bits = bits;
             _volumeLogUpdatePeriod = volumeLogUpdatePeriodMilliseconds;
         }
-
-        /*
-         * Starts audio recording
-         *
-         * Initialises WAVE writer and timer for volume logging
-         */
+        
+        /// <summary>
+        /// Starts audio recording
+        /// </summary>
+        /// <param name="filePath"> output file path </param>
         public void StartRecord(string filePath)
         {
             _outputFilename = filePath;
@@ -41,11 +45,9 @@ namespace TrackzamClient
             _waveIn.StartRecording();
         }
         
-        /*
-         * Stops audio recording
-         *
-         * Just closes each stream and writer
-         */
+        /// <summary>
+        /// Stops audio recording
+        /// </summary>
         public void StopRecording()
         {
             _dispatcherTimer.Stop();

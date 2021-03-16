@@ -11,58 +11,69 @@ namespace TrackzamClient
 {
     public class DataSender
     {
-        /*
-         * Sets IP address of a server to send to
-         */
+        /// <summary>
+        /// Sets IP address
+        /// </summary>
+        /// <param name="ipAddress"> ip address string </param>
         public static void SetIPAdress(string ipAddress)
         {
             _ipAddress = ipAddress;
         }
         
-        //Executes sender method with api/send_audio_logs
+        /// <summary>
+        /// Sends audio logs
+        /// </summary>
+        /// <param name="path"> audio log file path </param>
         public static void SendAudioLogs(string path)
         {
             SendFileAsync("send_audio_logs", path);
         }
         
-        //Executes sender method with api/send_audio_file
+        /// <summary>
+        /// Sends audio file
+        /// </summary>
+        /// <param name="path"> audio file path </param>
         public static void SendAudioFile(string path)
         {
             SendFileAsync("send_audio_file", path, "8080");
         }
         
-        //Executes sender method with api/send_video_file
+        /// <summary>
+        /// Sends video file
+        /// </summary>
+        /// <param name="path"> video file path </param>
         public static void SendVideoFile(string path, string startTime)
         {
             SendFileAsync("send_video_file", path, "8080", "&start_time="+startTime);
         }
         
-        //Executes sender method with api/send_keyboard_logs
+        /// <summary>
+        /// Sends keyboard log file
+        /// </summary>
+        /// <param name="path"> keyboard log file path </param>
         public static void SendKeyboardLogs(string path)
         {
             SendFileAsync("send_keyboard_logs", path);
         }
         
-        //Executes sender method with api/send_mouse_logs
+        /// <summary>
+        /// Sends mouse log file
+        /// </summary>
+        /// <param name="path"> mouse log file path </param>
         public static void SendMouseLogs(string path)
         {
             SendFileAsync("send_mouse_logs", path);
         }
         
-        //Executes sender method with api/send_windows_logs
+        /// <summary>
+        /// Sends active window log file
+        /// </summary>
+        /// <param name="path"> active window log file path </param>
         public static void SendWindowLogs(string path)
         {
             SendFileAsync("send_window_logs", path);
         }
         
-        /*
-         * Sends file of a given path to the server
-         *
-         * Creates HTTP request in dedicated thread
-         * Waits for response
-         * Includes auth data
-         * Includes additional parameters if needed
-         */
         private static async void SendFileAsync(string type, string path, string port = "8000", string additionalKeys = "")
         {
             await Task.Run(() =>

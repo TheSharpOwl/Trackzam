@@ -16,6 +16,11 @@ namespace TrackzamClient
 {
     public class VideoRecorder
     {
+        /// <summary>
+        /// Constructor for VideoRecorder
+        /// </summary>
+        /// <param name="frameRate"> output videofile framerate </param>
+        /// <param name="resolutionLoweringDivisor"> divisor for camera default resolution </param>
         public VideoRecorder(int frameRate, float resolutionLoweringDivisor)
         {
             _frames = new List<Bitmap>();
@@ -26,13 +31,10 @@ namespace TrackzamClient
             FFmpegLoader.FFmpegPath = Directory.GetCurrentDirectory() + "\\FFMPEG";
             _resolutionDivisor = resolutionLoweringDivisor;
         }
-
-        /*
-         * Starts video recording:
-         *
-         * Starts timer to control fps
-         * Starts video capture device
-         */
+        
+        /// <summary>
+        /// Starts video recording
+        /// </summary>
         public void StartRecording(string path)
         {
             _filePath = path;
@@ -43,13 +45,9 @@ namespace TrackzamClient
             _dispatcherTimer.Start();
         }
         
-        /*
-         * Stops video recording:
-         *
-         * Fetches FFMPEG library
-         * Initializes video encoding to mp4
-         * Creates video file frame by frame
-         */
+        /// <summary>
+        /// Stops video recording
+        /// </summary>
         public void StopRecording()
         {
             _videoCaptureDevice.SignalToStop();

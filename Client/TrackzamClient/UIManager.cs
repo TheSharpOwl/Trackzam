@@ -4,9 +4,9 @@ using System.Windows.Controls;
 
 namespace TrackzamClient
 {
-    /*
-     * A lot of methods for UI creation - buttons, windows, panels, text input fields
-     */
+    /// <summary>
+    /// A lot of methods for UI creation - buttons, windows, panels, text input fields
+    /// </summary>
     public static class UIManager
     {
         public static void Initialize(StackPanel stackPanel, double width, double height)
@@ -15,10 +15,10 @@ namespace TrackzamClient
             _width = width;
             _height = height;
         }
-
-        /*
-         * Adds a button to private StackPanel and returns it
-         */
+        
+        /// <summary>
+        /// Adds a button to private StackPanel and returns it
+        /// </summary>
         public static Button AddButton(string text, RoutedEventHandler handler)
         {
             Button button = new Button();
@@ -28,45 +28,46 @@ namespace TrackzamClient
             return button;
         }
 
-        /*
-         * Aligns given element to center
-         */
+        /// <summary>
+        /// Aligns given element to center
+        /// </summary>
         public static void AlignCenter(Control contentControl)
         {
             contentControl.HorizontalAlignment = HorizontalAlignment.Center;
             contentControl.VerticalAlignment = VerticalAlignment.Center;
         }
 
-        /*
-         * Sets element size
-         */
+        /// <summary>
+        /// Sets element size
+        /// </summary>
         public static void SetSize(Control contentControl, double width, double height)
         {
             contentControl.Width = width;
             contentControl.Height = height;
         }
-
-        /*
-         * Sets panel size (panel is not a usual element like button)
-         */
+        
+        /// <summary>
+        /// Sets panel size (panel is not a usual element like button)
+        /// </summary>
         public static void SetPanelSize(Panel panel, double width, double height)
         {
             panel.Width = width;
             panel.Height = height;
         }
         
-        /*
-         * Sets text block size
-         */
+        /// <summary>
+        /// Sets TextBlock size
+        /// </summary>
         public static void SetTextBlockSize(TextBlock textBlock, double width, double height)
         {
             textBlock.Width = width;
             textBlock.Height = height;
         }
-
-        /*
-         * Creates and returns a new text block
-         */
+ 
+        /// <summary>
+        /// Creates and a new text block
+        /// </summary>
+        /// <returns> New TextBox </returns>
         public static TextBlock NewTextBlock(string content, double width, double height)
         {
             TextBlock textBlock = new TextBlock();
@@ -76,25 +77,26 @@ namespace TrackzamClient
             return textBlock;
         }
         
-        /*
-         * Sets a given button's text
-         */
+        /// <summary>
+        /// Sets a given button's text
+        /// </summary>
         public static void UpdateButtonText(Button button, string newText)
         {
             button.Content = newText;
         }
 
-        /*
-         * Sets a given text block's text
-         */
+        /// <summary>
+        /// Sets a given text block's text
+        /// </summary>
         public static void UpdateTextBlockText(TextBlock textBlock, string newText)
         {
             textBlock.Text = newText;
         }
-
-        /*
-         * Creates and returns a new Text Block
-         */
+        
+        /// <summary>
+        /// Creates a new Text Block and attaches it to local StackPanel
+        /// </summary>
+        /// <returns> New attached TextBlock </returns>
         public static TextBlock AddTextBlock()
         {
             TextBlock textBlock = new TextBlock();
@@ -102,20 +104,19 @@ namespace TrackzamClient
             return textBlock;
         }
 
-        /*
-         * Shows a little window with message
-         */
+        /// <summary>
+        /// Shows a little window with message
+        /// </summary>
         public static void ShowMessage(string message)
         {
             MessageBox.Show(message);
         }
         
-        /*
-         * Initializes and opens a login window
-         *
-         * Adds all buttons and text input fields inside itself
-         * Adds all event handlers inside buttons' logic
-         */
+        /// <summary>
+        ///  Initializes and opens a login window
+        /// Adds all buttons and text input fields inside itself
+        /// Adds all event handlers inside buttons' logic
+        /// </summary>
         public static void OpenLoginWindow(Action<(string login, string pass, string email)> eventHandler)
         {
             _loginWindow = OpenWindow("login", _width, _height);

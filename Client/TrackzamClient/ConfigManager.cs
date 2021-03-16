@@ -12,6 +12,10 @@ namespace TrackzamClient
         public static string StorageDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         public static string ServerIP = "34.71.243.7";
 
+        /// <summary>
+        /// Retrieves server IP and storage directory from config file
+        /// </summary>
+        /// <param name="currentDirectoryTextBlock"> textblock with storage folder path to update </param>
         public static void RetrieveConfigData(TextBlock currentDirectoryTextBlock)
         {
             _currentDirectoryTextBlock = currentDirectoryTextBlock;
@@ -41,6 +45,10 @@ namespace TrackzamClient
                 UIManager.ShowMessage(e.Message);
             }
         }
+        
+        /// <summary>
+        /// Sets storage directory in config
+        /// </summary>
         public static void SetStorageDirectory()
         {
             FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();

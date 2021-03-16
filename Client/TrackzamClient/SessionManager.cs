@@ -45,13 +45,11 @@ namespace TrackzamClient
             }
         }
 
-        /*
-         * Ends session:
-         *
-         * Stops all recording modules
-         * Opens explorer window with recorded files
-         * Tells DataSender to start sending files asynchronously
-         */
+        /// <summary>
+        /// Ends recording session,
+        /// stops all recording modules,
+        /// tells DataSender to start sending files
+        /// </summary>
         public void EndSession()
         {
             if (!IsSessionInProgress) return;

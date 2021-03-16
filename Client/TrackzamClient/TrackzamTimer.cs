@@ -8,22 +8,15 @@ namespace TrackzamClient
 {
     class TrackzamTimer
     {
+        /// <returns> Current time in "yyyy-MM-dd-HH-mm-ss-" format  </returns>
         public static string GetNowString()
         {
             DateTime timeNow = DateTime.Now;
             string ms = timeNow.Millisecond.ToString();
-            // the name of the file should be in this format
             return timeNow.ToString("yyyy-MM-dd-HH-mm-ss-") + ms.ToString();
         }
 
-        public static string GetNowClockString()
-        {
-             DateTime timeNow = DateTime.Now;
-            string ms = timeNow.Millisecond.ToString();
-            // the name of the file should be in this format
-            return timeNow.ToString("HH-mm-ss-") + ms.ToString();
-        }
-        
+        /// <returns> Current time in "yyyy/MM/dd HH:mm:ss" format  </returns>
         public static string GetTimestampString()
         {
             DateTime timeNow = DateTime.Now;

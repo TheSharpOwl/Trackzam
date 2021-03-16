@@ -7,21 +7,26 @@ namespace TrackzamClient
     {
         public bool IsLoggedIn;
 
-        public bool RetrieveLoginStatus()
+        /// <summary>
+        /// Checks if user data already stored locally and tries to login
+        /// </summary>
+        public void RetrieveLoginStatus()
         {
             if (InfoSaver.UserIsStored())
             {
                 var result = TryLogin(InfoSaver.GetUser(), InfoSaver.GetPass(), InfoSaver.GetEmail());
                 IsLoggedIn = result;
-                return result;
             }
             else
             {
                 IsLoggedIn = false;
-                return false;
             }
         }
         
+        /// <summary>
+        /// Checks user auth credentials correctness
+        /// </summary>
+        /// <returns> True if logic/password are correct </returns>
         public bool TryLogin(string login, string password, string email)
         {
             try
