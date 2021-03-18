@@ -135,14 +135,15 @@ namespace TrackzamClient
             };
             
             TextBlock passText = NewTextBlock("Password:", _width / 4, _height / 30);
-            
-            TextBox passInput = new TextBox();
+            PasswordBox passInput = new PasswordBox();
             SetSize(passInput, _width/4, _height/20);
-            passInput.Text = "Type Password Here";
+            //passText.PasswordChar(
+            //passInput.Text = "Type Password Here";
+            passInput.PasswordChar = '*';
             passInput.GotFocus += (sender, args) => 
             { 
                 if (_passFocus) return;
-                passInput.Text = "";
+                passInput.Password = "";
                 _passFocus = true;
             };
             
@@ -162,7 +163,7 @@ namespace TrackzamClient
             loginButton.Content = "Login";
             loginButton.Click += (sender, args) =>
             {
-                eventHandler.Invoke((loginInput.Text, passInput.Text, emailInput.Text));
+                eventHandler.Invoke((loginInput.Text, passInput.Password, emailInput.Text));
             };
             
 
