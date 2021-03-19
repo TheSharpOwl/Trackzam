@@ -11,7 +11,11 @@ namespace TrackzamClient
         private bool IsLogging = false;
         private String directory;
         private List<String> _logs;
-        
+
+        /// <summary>
+        /// Function to start logging active window
+        /// </summary>
+        /// <param name="dir"> directory where to save log file </param>
         public void StartLogging(String dir)
         {
             directory = dir;
@@ -19,6 +23,9 @@ namespace TrackzamClient
             _logs = new List<String>();
         }
 
+        /// <summary>
+        /// Function to stop logging active window
+        /// </summary>
         public void StopLogging()
         {
             if (!IsLogging)
@@ -26,7 +33,9 @@ namespace TrackzamClient
                 return;
             }
             IsLogging = false;
-            StringBuilder outputStringBuilder = new StringBuilder();
+
+            // go through all logs and write to file
+            StringBuilder outputStringBuilder = new StringBuilder();            
             foreach (var item in _logs)
             {
                 outputStringBuilder.Append(item);
@@ -48,6 +57,9 @@ namespace TrackzamClient
 
 
 
+        /// <summary>
+        /// Constructor for ActiveWindowLoggerClass
+        /// </summary>
         public ActiveWindowLoggerClass()
         {
             
