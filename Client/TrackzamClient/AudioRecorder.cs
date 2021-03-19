@@ -17,6 +17,9 @@ namespace TrackzamClient
             _sampleRate = sampleRate;
             _bits = bits;
             _volumeLogUpdatePeriod = volumeLogUpdatePeriodMilliseconds;
+            _dispatcherTimer = new DispatcherTimer();
+            _dispatcherTimer.Tick += OnTimerTick;
+            _dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, _volumeLogUpdatePeriod);
         }
         
         /// <summary>
@@ -37,9 +40,6 @@ namespace TrackzamClient
             _writer = new WaveFileWriter(_outputFilename+"\\microphone.wav", _waveIn.WaveFormat);
             _audioVolumeWriter = new StreamWriter(_outputFilename + "\\audioVolume.txt");
             
-            _dispatcherTimer = new DispatcherTimer();
-            _dispatcherTimer.Tick += OnTimerTick;
-            _dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, _volumeLogUpdatePeriod);
             _dispatcherTimer.Start();
             
             _waveIn.StartRecording();
@@ -50,6 +50,8 @@ namespace TrackzamClient
         /// </summary>
         public void StopRecording()
         {
+            _waveIn.DataAvailable -= waveIn_DataAvailable;
+            _waveIn.RecordingStopped -= waveIn_RecordingStopped;
             _dispatcherTimer.Stop();
             _waveIn.StopRecording();
             _audioVolumeWriter.Close();
