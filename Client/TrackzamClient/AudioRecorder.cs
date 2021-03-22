@@ -30,18 +30,17 @@ namespace TrackzamClient
         {
             _outputFilename = filePath;
             _waveIn = new WaveIn();
-            _waveIn.DeviceNumber = 0;
+            
+            _waveIn.DeviceNumber = WaveIn.DeviceCount-1;
             
             _waveIn.DataAvailable += waveIn_DataAvailable;
-            _waveIn.RecordingStopped += waveIn_RecordingStopped;
             
-            _waveIn.WaveFormat = new WaveFormat(_sampleRate, _bits, 1);
+            _waveIn.WaveFormat = new WaveFormat(_sampleRate, _bits, WaveIn.GetCapabilities(0).Channels);
             
             _writer = new WaveFileWriter(_outputFilename+"\\microphone.wav", _waveIn.WaveFormat);
             _audioVolumeWriter = new StreamWriter(_outputFilename + "\\audioVolume.txt");
             
             _dispatcherTimer.Start();
-            
             _waveIn.StartRecording();
         }
         
@@ -51,7 +50,6 @@ namespace TrackzamClient
         public void StopRecording()
         {
             _waveIn.DataAvailable -= waveIn_DataAvailable;
-            _waveIn.RecordingStopped -= waveIn_RecordingStopped;
             _dispatcherTimer.Stop();
             _waveIn.StopRecording();
             _audioVolumeWriter.Close();
@@ -72,10 +70,6 @@ namespace TrackzamClient
             }
         }
 
-        private void waveIn_RecordingStopped(object sender, EventArgs e)
-        {
-        }
-        
         private void LogVolume(WaveInEventArgs e)
         {
             float volume = 0;
