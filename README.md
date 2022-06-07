@@ -4,7 +4,7 @@ Students tracker for teaching and exams.
 ## Description:
 Trackzam contains 2 parts:
 1. Student side software: where they can record themselves while attending a lecture or an exam and the video is sent to the server
-2. Server (which is meant for teachers): receives the videos, analyzes them for example if the student is not paying attention to the lecture and reports it to the teachers.
+2. Server (which is meant for teachers): receives the videos, analyzes them for example if the student is not paying attention to the lecture and reports it to the teachers. In addition, it can know which applications are opened by the student and where is the mouse clicking.
 
 ## [Live demo](https://youtu.be/e3om6VbYJJU?t=233)
 (time stamp is when showing it live, you can watch the rest of the video too)
